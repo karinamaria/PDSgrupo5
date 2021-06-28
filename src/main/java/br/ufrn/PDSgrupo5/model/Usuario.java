@@ -1,15 +1,17 @@
 package br.ufrn.PDSgrupo5.model;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")
 public class Usuario extends EntidadeAbstrata {
-
+	@Column(unique = true)
 	private String login;
 
+	@JsonIgnore
 	private String senha;
 
 	@Column(name="papel")

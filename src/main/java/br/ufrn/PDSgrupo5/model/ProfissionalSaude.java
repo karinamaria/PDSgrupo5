@@ -8,14 +8,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "profissional_saude")
-public class ProfissionalSaude extends Pessoa {
-
+public class ProfissionalSaude extends EntidadeAbstrata {
+	@Column(name="numero_registro")
 	private Long numeroRegistro;
 
 	@Column(name="data_aprovacao_registro")
 	private Date dataAprovacaoRegistro;
 
 	private String descricao;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private Pessoa pessoa;
 
 	@Column(name="tipo_registro")
 	@Enumerated(EnumType.STRING)
@@ -50,6 +53,14 @@ public class ProfissionalSaude extends Pessoa {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	public EnumTipoRegistro getEnumTipoRegistro() {

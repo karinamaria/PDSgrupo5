@@ -1,7 +1,7 @@
 package br.ufrn.PDSgrupo5.enumeration;
 
 public enum EnumTipoPapel {
-	PACIENTE("Paciente"), PROFISSIONAL_SAUDE ("Profissional da saúde"), TELEFONE("Telefone");
+	PACIENTE("Paciente"), PROFISSIONAL_SAUDE ("Profissional da saúde"), VALIDADOR("Validador");
 
 	private String descricao;
 

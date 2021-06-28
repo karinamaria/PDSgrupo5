@@ -7,7 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.util.Date;
 
-@MappedSuperclass
+@Entity
+@Table(name = "pessoa")
 public abstract class Pessoa extends EntidadeAbstrata {
 	@NotNull(message = "O nome não pode ser vazio")
 	private String nome;

@@ -8,13 +8,14 @@ import java.util.List;
 @ApiIgnore
 @Entity
 @Table(name = "paciente")
-public class Paciente extends Pessoa {
+public class Paciente extends EntidadeAbstrata {
 
 	private Double altura;
 
 	private Double peso;
 
-//	private List<DoencaCronica> doencaCronica;
+	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private Pessoa pessoa;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Paciente> dependentes;
@@ -36,6 +37,14 @@ public class Paciente extends Pessoa {
 
 	public void setPeso(Double peso) {
 		this.peso = peso;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	public List<Paciente> getDependentes() {
