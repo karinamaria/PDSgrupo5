@@ -1,38 +1,82 @@
 package br.ufrn.PDSgrupo5.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "endereco")
-@NoArgsConstructor
-@EqualsAndHashCode
 public class Endereco extends EntidadeAbstrata {
 
-	@Getter @Setter
 	private String cidade;
 
-	@Getter @Setter
 	private String bairro;
 
-	@Getter @Setter
 	private String rua;
 
-	@Getter @Setter
 	private Integer numero;
 
-	@Getter @Setter
 	private String complemento;
 
-	@Getter @Setter
 	private String cep;
 
-	@Getter @Setter
 	private String pais;
 
+	public Endereco() {
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getRua() {
+		return rua;
+	}
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public String getPais() {
+		return pais;
+	}
+
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
 }

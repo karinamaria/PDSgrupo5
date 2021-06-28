@@ -1,25 +1,48 @@
 package br.ufrn.PDSgrupo5.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import java.util.List;
 
+@ApiIgnore
 @Entity
 @Table(name = "paciente")
-@NoArgsConstructor
-@EqualsAndHashCode
 public class Paciente extends Pessoa {
 
-	@Getter @Setter private Double altura;
+	private Double altura;
 
-	@Getter @Setter private Double peso;
+	private Double peso;
 
-//	@Getter @Setter private List<DoencaCronica> doencaCronica;
+//	private List<DoencaCronica> doencaCronica;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	@Getter @Setter private List<Paciente> dependentes;
+	private List<Paciente> dependentes;
+
+	public Paciente() {
+	}
+
+	public Double getAltura() {
+		return altura;
+	}
+
+	public void setAltura(Double altura) {
+		this.altura = altura;
+	}
+
+	public Double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Double peso) {
+		this.peso = peso;
+	}
+
+	public List<Paciente> getDependentes() {
+		return dependentes;
+	}
+
+	public void setDependentes(List<Paciente> dependentes) {
+		this.dependentes = dependentes;
+	}
 }
