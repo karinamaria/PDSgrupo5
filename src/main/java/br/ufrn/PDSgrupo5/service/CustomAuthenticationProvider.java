@@ -21,8 +21,6 @@ import java.util.Optional;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     private UsuarioRepository usuarioRepository;
 
-    private static BCryptPasswordEncoder encoderBCrypt = new BCryptPasswordEncoder();
-
     @Autowired
     public CustomAuthenticationProvider(UsuarioRepository usuarioRepository){
         this.usuarioRepository=usuarioRepository;
@@ -38,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         Usuario usuario = Optional.ofNullable(usuarioRepository.findByLogin(name))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        if(verificarSenha(usuario, password)){
+        if(new BCryptPasswordEncoder().matches(password, usuario.getSenha())){
             List<GrantedAuthority> permissoes = AuthorityUtils.createAuthorityList(usuario.getEnumTipoPapel().getDescricao());
             return new UsernamePasswordAuthenticationToken(
                     name, password, permissoes);
@@ -48,14 +46,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     }
 
-    private boolean verificarSenha(Usuario usuario, String password) {
-        String senhaHas = encoderBCrypt.encode(password);
-
-        return usuario.getSenha().equals(senhaHas);
-    }
-
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
