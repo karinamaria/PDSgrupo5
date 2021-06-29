@@ -10,10 +10,6 @@ import java.util.List;
 @Table(name = "paciente")
 public class Paciente extends EntidadeAbstrata {
 
-	private Double altura;
-
-	private Double peso;
-
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Pessoa pessoa;
 
@@ -21,22 +17,6 @@ public class Paciente extends EntidadeAbstrata {
 	private List<Paciente> dependentes;
 
 	public Paciente() {
-	}
-
-	public Double getAltura() {
-		return altura;
-	}
-
-	public void setAltura(Double altura) {
-		this.altura = altura;
-	}
-
-	public Double getPeso() {
-		return peso;
-	}
-
-	public void setPeso(Double peso) {
-		this.peso = peso;
 	}
 
 	public Pessoa getPessoa() {
