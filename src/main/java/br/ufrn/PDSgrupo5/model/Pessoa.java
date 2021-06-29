@@ -3,18 +3,22 @@ package br.ufrn.PDSgrupo5.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.util.Date;
 
 @Entity
 @Table(name = "pessoa")
-public abstract class Pessoa extends EntidadeAbstrata {
+public class Pessoa extends EntidadeAbstrata {
 	@NotNull(message = "O nome não pode ser vazio")
 	private String nome;
 
 	@NotNull(message = "O nome não pode ser vazio")
 	private String cpf;
+
+	@Email(message = "Informe um email válido")
+	private String email;
 
 	@Past(message="A data de nascimento deve ser anterior ao dia de hoje")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -39,6 +43,14 @@ public abstract class Pessoa extends EntidadeAbstrata {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getCpf() {
