@@ -4,14 +4,17 @@ import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "usuario")
 public class Usuario extends EntidadeAbstrata {
 	@Column(unique = true)
+	@NotNull(message = "O login não pode ser vazio")
 	private String login;
 
 	@JsonIgnore
+	@NotNull(message = "A senha não pode ser vazia")
 	private String senha;
 
 	@Column(name="papel")
