@@ -2,16 +2,13 @@ package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
-import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -51,7 +48,7 @@ public class PacienteController {
             model.addAttribute(paciente);
             return form(model);
         }
-        
+
         pacienteService.salvarNovoPaciente(paciente);
 
         return "redirect:paciente/login";
