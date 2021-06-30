@@ -26,7 +26,7 @@ public class ProfissionalSaudeController {
 	
 	@GetMapping("/form")
 	public String form(Model model) {
-		if(model.containsAttribute("profissionalSaude")) {
+		if(!model.containsAttribute("profissionalSaude")) {
 			model.addAttribute(new ProfissionalSaude());
 		}
 		
@@ -44,6 +44,6 @@ public class ProfissionalSaudeController {
 		}
 		
 		profissionalSaudeService.cadastrarProfissional(profissionalSaude);
-		return "redirect:/profissional-saude/login" + profissionalSaude.getId();
+		return "redirect:/profissional-saude/login";
 	}
 }

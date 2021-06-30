@@ -62,6 +62,13 @@ public class ProfissionalSaudeService {
                 br.rejectValue("pessoa.email", "","E-mail já pertence a outro usuário");
             }
         }
+        
+        ProfissionalSaude profissional = buscarProfissionalPorNumeroRegistro(ps.getNumeroRegistro());
+		if(Objects.nonNull(profissional)) {
+			if(profissional.getId() != ps.getId()) {
+				br.rejectValue("numeroRegistro", "", "Registro profissional já pertence a outro usuário");
+			}
+		}
 		
 		return br;
 	}
@@ -74,7 +81,7 @@ public class ProfissionalSaudeService {
 		profissionalSaudeRepository.delete(ps);
 	}
 	
-	public ProfissionalSaude buscarProfissionalPorNumeroRegistro(ProfissionalSaude ps) {
-		return profissionalSaudeRepository.findByNumeroRegistro(ps.getNumeroRegistro());
+	public ProfissionalSaude buscarProfissionalPorNumeroRegistro(Long numeroRegistro) {
+		return profissionalSaudeRepository.findByNumeroRegistro(numeroRegistro);
 	}
 }
