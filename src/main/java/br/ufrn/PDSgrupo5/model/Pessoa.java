@@ -20,6 +20,7 @@ public class Pessoa extends EntidadeAbstrata {
 	@Email(message = "Informe um email válido")
 	private String email;
 
+	@NotNull(message = "A data de nascimento não pode ser vazia")
 	@Past(message="A data de nascimento deve ser anterior ao dia de hoje")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "data_nascimento", nullable=true)
