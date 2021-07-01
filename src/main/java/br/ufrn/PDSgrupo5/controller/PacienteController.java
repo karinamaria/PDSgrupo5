@@ -1,6 +1,6 @@
 package br.ufrn.PDSgrupo5.controller;
 
-import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
+import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,9 @@ import javax.validation.Valid;
 public class PacienteController {
     private PacienteService pacienteService;
 
-    private UsuarioHelper usuarioHelper;
-
     @Autowired
-    public PacienteController(PacienteService pacienteService, UsuarioHelper usuarioHelper){
+    public PacienteController(PacienteService pacienteService){
         this.pacienteService = pacienteService;
-        this.usuarioHelper = usuarioHelper;
     }
 
     @GetMapping
@@ -40,33 +37,23 @@ public class PacienteController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid Paciente paciente, BindingResult br, RedirectAttributes ra, Model model){
+        try{
+            pacienteService.verificarPermissao(paciente);
+            br = pacienteService.validarPaciente(paciente, br);
 
-        br = pacienteService.validarPaciente(paciente, br);
+            if(br.hasErrors()){
+                model.addAttribute("message", "Erro ao salvar paciente");
+                model.addAttribute(paciente);
+                return form(model);
+            }
+            paciente = pacienteService.verificarEdicao(paciente);
+            pacienteService.salvarPaciente(paciente);
 
-        if(br.hasErrors()){
-            model.addAttribute("message", "Erro ao salvar paciente");
-            model.addAttribute(paciente);
-            return form(model);
+        }catch(NegocioException ne){
+            return "/error/403.html";
         }
-
-        pacienteService.salvarNovoPaciente(paciente);
-
-        return "redirect:paciente/login";
-    }
-
-    @PostMapping("/salvarEdicao")
-    public String salvarEdicao(@Valid Paciente paciente, BindingResult br, RedirectAttributes ra, Model model){
-
-        br = pacienteService.validarPaciente(paciente, br);
-
-        if(br.hasErrors()){
-            model.addAttribute("message", "Erro ao editar paciente");
-            model.addAttribute(paciente);
-            return editar(model);
-        }
-        pacienteService.salvar(paciente);
-
-        return "redirect:paginaprincipallogado";
+        //se for edição, deve retornar para página diferente
+        return "redirect:/login";
     }
 
     //o usuário edita seu próprio cadastro
@@ -76,7 +63,7 @@ public class PacienteController {
         return form(model);
     }
 
-    //validador pode editar
+    //usuário com papel "validador" pode editar qualquer paciente
     @GetMapping("/editarOutroUsuario/{id}")
     public String editarOutroPaciente(@PathVariable Long id, Model model){
         model.addAttribute(pacienteService.buscarPacientePorUsuario(id));

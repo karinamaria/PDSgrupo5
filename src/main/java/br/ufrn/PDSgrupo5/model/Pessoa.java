@@ -28,7 +28,7 @@ public class Pessoa extends EntidadeAbstrata {
 	private Date dataNascimento;
 
 	@NotNull(message = "O nome não pode ser vazio")
-	private char sexo;
+	private String sexo;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "usuario_id", referencedColumnName = "id")
@@ -70,11 +70,11 @@ public class Pessoa extends EntidadeAbstrata {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public char getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(char sexo) {
+	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 
