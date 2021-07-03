@@ -1,5 +1,7 @@
 package br.ufrn.PDSgrupo5.service;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
+import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.Pessoa;
@@ -33,9 +35,11 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
     }
 
-    public void salvarNovoPaciente(Paciente paciente){
-        paciente.setAtivo(true);
-        paciente.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(paciente.getPessoa().getUsuario()));
+    public void salvarPaciente(Paciente paciente){
+        if(paciente.getId() == null){
+            paciente.setAtivo(true);
+            paciente.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(paciente.getPessoa().getUsuario()));
+        }
         salvar(paciente);
     }
 
@@ -65,10 +69,40 @@ public class PacienteService {
     }
 
     public Paciente buscarPacientePorUsuarioLogado(){
+        Paciente p = pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
         return pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
     }
     public Paciente buscarPacientePorUsuario(Long id){
         Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
         return pacienteRepository.findPacienteByUsuario(usuario);
+    }
+
+    public Paciente verificarEdicao(Paciente paciente) {
+        if(paciente.getId() == null){//não eh edição
+            return paciente;
+        }
+        Paciente paciente1 = pacienteRepository.findById(paciente.getId()).get();
+        paciente.getPessoa().getUsuario().setEnumTipoPapel(paciente1.getPessoa().getUsuario().getEnumTipoPapel());
+        paciente.getPessoa().getUsuario().setSenha(paciente1.getPessoa().getUsuario().getSenha());
+
+        if(Objects.isNull(paciente.getPessoa().getEndereco())){
+            paciente.getPessoa().setEndereco(null);
+        }
+
+        return paciente1;
+    }
+
+    public void verificarPermissao(Paciente paciente) throws NegocioException{
+        Paciente pacienteLogado = buscarPacientePorUsuarioLogado();
+
+        if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel() == EnumTipoPapel.VALIDADOR
+            || paciente.getId() == null){
+            return;
+        }
+
+        if( paciente.getId() != pacienteLogado.getId() || paciente.getPessoa().getId() != paciente.getPessoa().getId()
+            || paciente.getPessoa().getUsuario().getId() != paciente.getPessoa().getUsuario().getId()){
+            throw new NegocioException("Você não tem permissão para editar esse usuário");
+        }
     }
 }

@@ -11,7 +11,8 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class EntidadeAbstrata implements Serializable {
+public abstract class
+EntidadeAbstrata implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -17,8 +17,12 @@
         <div class="pacienteForm">
             <h2 class="text-secondary mb-4 text-center">CADASTRO PACIENTE</h2>
             <form class="ml-md-5 mr-md-5 mb-5" method="POST" th:object="${paciente}" th:action="@{/paciente/salvar}">
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{pessoa.id}"/>
+                <input type="hidden" th:field="*{pessoa.usuario.id}"/>
+                <input type="hidden" th:field="*{pessoa.endereco.id}"/>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="nomePacienteInput">Nome</label> <input
                             class="form-control" id="nomePacienteInput" type="text"
                             th:field="*{pessoa.nome}" required="required" />
@@ -26,7 +30,7 @@
                             <div th:if="${#fields.hasErrors('pessoa.nome')}" th:errors="*{pessoa.nome}">errors</div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="cpfInput">CPF</label> <input class="form-control"
                                                                  id="cpfInput" type="text" th:field="*{pessoa.cpf}"
                                                                  data-mask="000.000.000-00" data-mask-reverse="true"
@@ -35,6 +39,13 @@
                             <div th:if="${#fields.hasErrors('pessoa.cpf')}"
                                  th:errors="*{pessoa.cpf}">errors</div>
                         </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="sexoInput">Sexo</label>
+                        <select class="form-control" th:field="*{pessoa.sexo}" id="sexoInput" required>
+                            <option value="F">Feminino</option>
+                            <option value="M">Masculino</option>
+                        </select>
                     </div>
                 </div>
 
