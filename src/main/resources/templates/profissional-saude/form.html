@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html	lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+       	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8">
+	<title>Cadastro</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<th:block layout:fragment="content">
+        <div th:if="${param.error}">
+            Erro
+        </div>
+        <div class="profissionalSaudeForm">
+            <h2 class="text-secondary mb-4 text-center">CADASTRO PROFISSIONAL DA SAÚDE</h2>
+            <form class="ml-md-5 mr-md-5 mb-5" method="POST" th:object="${profissionalSaude}" th:action="@{/profissional-saude/cadastrar}">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="nomeProfissionalSaudeInput">Nome</label> <input
+                            class="form-control" id="nomeProfissionalSaudeInput" type="text"
+                            th:field="*{pessoa.nome}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.nome')}" th:errors="*{pessoa.nome}">errors</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="cpfInput">CPF</label> <input class="form-control"
+                                                                 id="cpfInput" type="text" th:field="*{pessoa.cpf}"
+                                                                 data-mask="000.000.000-00" data-mask-reverse="true"
+                                                                 required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.cpf')}"
+                                 th:errors="*{pessoa.cpf}">errors</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="sexoInput">Sexo</label>
+                        <select class="form-control" th:field="*{pessoa.sexo}" id="sexoInput" required>
+                            <option value="F">Feminino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="emailProfissionalSaudeInput">E-mail</label> <input
+                            class="form-control" id="emailProfissionalSaudeInput" type="text"
+                            th:field="*{pessoa.email}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.email')}"
+                                 th:errors="*{pessoa.email}">errors</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="DataNascimentoProfissionalSaudeInput">Data de Nascimento</label> <input
+                            class="form-control" id="DataNascimentoProfissionalSaudeInput" type="date"
+                            th:field="*{pessoa.dataNascimento}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.dataNascimento')}"
+                                 th:errors="*{pessoa.dataNascimento}">errors</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="loginProfissionalSaudeInput">Login</label> <input
+                            class="form-control" id="loginProfissionalSaudeInput" type="text"
+                            th:field="*{pessoa.usuario.login}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.usuario.login')}"
+                                 th:errors="*{pessoa.usuario.login}">errors</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="senhaProfissionalSaudeInput">Senha</label> <input
+                            class="form-control" id="senhaProfissionalSaudeInput" type="password"
+                            th:field="*{pessoa.usuario.senha}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('pessoa.usuario.senha')}"
+                                 th:errors="*{pessoa.usuario.senha}">errors</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="tipoRegistroProfissionalInput">Tipo do Registro Profissional</label>
+                        <select class="form-control" th:field="*{enumTipoRegistro}" id="tipoRegistroProfissionalInput" required>
+						    <option th:each="tipoRegistro : ${T(br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro).values()}" 
+									th:value="${tipoRegistro}" th:text="${tipoRegistro.descricao}"></option>
+						</select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="numeroRegistroProfissionalInput">Número do Registro Profissional</label> <input
+                            class="form-control" id="numeroRegistroProfissional" type="text"
+                            th:field="*{numeroRegistro}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('numeroRegistro')}"
+                                 th:errors="*{numeroRegistro}">errors</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="DataAprovacaoRegistroInput">Data de Aprovação do Registro Profissional</label> <input
+                            class="form-control" id="DataAprovacaoRegistroInput" type="date"
+                            th:field="*{dataAprovacaoRegistro}" required="required" />
+                        <div style="color: red;">
+                            <div th:if="${#fields.hasErrors('dataAprovacaoRegistro')}"
+                                 th:errors="*{dataAprovacaoRegistro}">errors</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </div>
+
+            </form>
+        </div>
+</body>
+</html>

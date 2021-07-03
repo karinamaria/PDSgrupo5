@@ -3,6 +3,11 @@ package br.ufrn.PDSgrupo5.model;
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +16,10 @@ import java.util.List;
 public class ProfissionalSaude extends EntidadeAbstrata {
 	@Column(name="numero_registro")
 	private Long numeroRegistro;
-
+	
+	@NotNull(message = "A data de aprovação do registro não pode ser vazia")
+	@Past(message="A data de aprovação deve ser anterior ao dia de hoje")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name="data_aprovacao_registro")
 	private Date dataAprovacaoRegistro;
 
@@ -27,6 +35,8 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 	@Column(name="turno_atendimento")
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<TurnoAtendimento> turnoAtendimento;
+	
+	private boolean legalizado = false;
 
 	public ProfissionalSaude() {
 	}
@@ -77,5 +87,13 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 
 	public void setTurnoAtendimento(List<TurnoAtendimento> turnoAtendimento) {
 		this.turnoAtendimento = turnoAtendimento;
+	}
+	
+	public boolean getLegalizado() {
+		return legalizado;
+	}
+	
+	public void setLegalizado(boolean legalizado) {
+		this.legalizado = legalizado;
 	}
 }
