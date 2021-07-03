@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
+import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.repository.ProfissionalSaudeRepository;
 
 @Service
@@ -19,25 +23,29 @@ public class ProfissionalSaudeService {
 	
 	private UsuarioService usuarioService;
 	
+	private UsuarioHelper usuarioHelper;
+	
 	@Autowired
 	public ProfissionalSaudeService(ProfissionalSaudeRepository profissionalSaudeRepository,
-									PessoaService pessoaService, UsuarioService usuarioService) {
+									PessoaService pessoaService, UsuarioService usuarioService,
+									UsuarioHelper usuarioHelper) {
 		this.profissionalSaudeRepository = profissionalSaudeRepository;
 		this.pessoaService = pessoaService;
 		this.usuarioService = usuarioService;
+		this.usuarioHelper = usuarioHelper;
 	}
 	
 	public ProfissionalSaude salvar(ProfissionalSaude ps) {
 		return profissionalSaudeRepository.save(ps);
 	}
 	
-	public void cadastrarProfissional(ProfissionalSaude ps) {
+	public void cadastrar(ProfissionalSaude ps) {
 		ps.setAtivo(true);
 		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
 		salvar(ps);
 	}
 	
-	public BindingResult validarProfissionalSaude(ProfissionalSaude ps, BindingResult br) {
+	public BindingResult validarDados(ProfissionalSaude ps, BindingResult br) {
 		if(!pessoaService.ehCpfValido(ps.getPessoa().getCpf())) {
 			br.rejectValue("pessoa.cpf", "", "CPF inválido");
 		}
@@ -73,6 +81,36 @@ public class ProfissionalSaudeService {
 		return br;
 	}
 	
+	public ProfissionalSaude verificarEdicao(ProfissionalSaude ps) {
+		if(ps.getId() == null){
+            return ps;
+        }
+		
+        ProfissionalSaude psAux = profissionalSaudeRepository.findById(ps.getId()).get();
+        ps.getPessoa().getUsuario().setEnumTipoPapel(psAux.getPessoa().getUsuario().getEnumTipoPapel());
+        ps.getPessoa().getUsuario().setSenha(psAux.getPessoa().getUsuario().getSenha());
+
+        if(Objects.isNull(ps.getPessoa().getEndereco())){
+            ps.getPessoa().setEndereco(null);
+        }
+
+        return psAux;
+	}
+	
+	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{
+        ProfissionalSaude psLogado = buscarProfissionalPorUsuarioLogado();
+
+        if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel() == EnumTipoPapel.VALIDADOR
+            || ps.getId() == null){
+            return;
+        }
+
+        if( ps.getId() != psLogado.getId() || ps.getPessoa().getId() != psLogado.getPessoa().getId()
+            || ps.getPessoa().getUsuario().getId() != psLogado.getPessoa().getUsuario().getId()){
+            throw new NegocioException("Você não tem permissão para editar esse usuário");
+        }
+    }
+	
 	public List<ProfissionalSaude> listarTodosProfissionais(){
 		return profissionalSaudeRepository.findAll();
 	}
@@ -84,4 +122,13 @@ public class ProfissionalSaudeService {
 	public ProfissionalSaude buscarProfissionalPorNumeroRegistro(Long numeroRegistro) {
 		return profissionalSaudeRepository.findByNumeroRegistro(numeroRegistro);
 	}
+	
+	public ProfissionalSaude buscarProfissionalPorUsuarioLogado() {
+		return profissionalSaudeRepository.findByUsuario(usuarioHelper.getUsuarioLogado());
+	}
+	
+	public ProfissionalSaude buscarProfissionalPorUsuario(Long id){
+        Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
+        return profissionalSaudeRepository.findByUsuario(usuario);
+    }
 }

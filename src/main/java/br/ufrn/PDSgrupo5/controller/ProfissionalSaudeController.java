@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -35,7 +37,7 @@ public class ProfissionalSaudeController {
 	
 	@PostMapping("/cadastrar")
 	public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
-		br = profissionalSaudeService.validarProfissionalSaude(profissionalSaude, br);
+		br = profissionalSaudeService.validarDados(profissionalSaude, br);
 		
 		if(br.hasErrors()) {
 			model.addAttribute("message", "Erro ao cadastrar profissional da saúde");
@@ -43,7 +45,36 @@ public class ProfissionalSaudeController {
 			return form(model);
 		}
 		
-		profissionalSaudeService.cadastrarProfissional(profissionalSaude);
-		return "redirect:/profissional-saude/login";
+		profissionalSaudeService.cadastrar(profissionalSaude);
+		return "redirect:/login";
 	}
+	
+	//o usuário edita seu próprio cadastro
+    @GetMapping("/editar")
+    public String editar(Model model){
+        model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
+        return form(model);
+    }
+
+    //usuário com papel "validador" pode editar qualquer profissional da saúde
+    @GetMapping("/editar-usuario/{id}")
+    public String editarOutroPaciente(@PathVariable Long id, Model model){
+        model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuario(id));
+        return form(model);
+    }
+
+    @GetMapping("/perfil")
+    public String visualizarPerfil(Model model){
+        model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
+        return "paginadevisualizacaoPerfil";
+    }
+
+    @DeleteMapping("/excluir-perfil")
+    public String excluirPerfil(){
+        ProfissionalSaude ps = profissionalSaudeService.buscarProfissionalPorUsuarioLogado();
+        ps.setAtivo(false);
+        profissionalSaudeService.salvar(ps);
+
+        return "/login";
+    }
 }

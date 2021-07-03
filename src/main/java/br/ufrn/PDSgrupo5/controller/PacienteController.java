@@ -37,21 +37,16 @@ public class PacienteController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid Paciente paciente, BindingResult br, RedirectAttributes ra, Model model){
-        try{
-            pacienteService.verificarPermissao(paciente);
-            br = pacienteService.validarPaciente(paciente, br);
+        //pacienteService.verificarPermissao(paciente);
+		br = pacienteService.validarPaciente(paciente, br);
 
-            if(br.hasErrors()){
-                model.addAttribute("message", "Erro ao salvar paciente");
-                model.addAttribute(paciente);
-                return form(model);
-            }
-            paciente = pacienteService.verificarEdicao(paciente);
-            pacienteService.salvarPaciente(paciente);
-
-        }catch(NegocioException ne){
-            return "/error/403.html";
-        }
+		if(br.hasErrors()){
+		    model.addAttribute("message", "Erro ao salvar paciente");
+		    model.addAttribute(paciente);
+		    return form(model);
+		}
+		paciente = pacienteService.verificarEdicao(paciente);
+		pacienteService.salvarPaciente(paciente);
         //se for edição, deve retornar para página diferente
         return "redirect:/login";
     }
