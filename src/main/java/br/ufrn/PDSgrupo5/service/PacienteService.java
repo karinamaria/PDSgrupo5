@@ -31,6 +31,7 @@ public class PacienteService {
         this.usuarioService = usuarioService;
         this.usuarioHelper = usuarioHelper;
     }
+
     public Paciente salvar(Paciente paciente){
         return pacienteRepository.save(paciente);
     }
@@ -43,6 +44,12 @@ public class PacienteService {
         salvar(paciente);
     }
 
+    /**
+     * Valida os dados do paciente
+     * @param paciente objeto que será validado
+     * @param br onde os erros relativos a entidade `Paciente`são acumulados
+     * @return um BindingResult que contém os erros, caso existam
+     */
     public BindingResult validarPaciente(Paciente paciente, BindingResult br){
         if(!pessoaService.ehCpfValido(paciente.getPessoa().getCpf())){
             br.rejectValue("pessoa.cpf", "", "CPF inválido");
@@ -72,11 +79,17 @@ public class PacienteService {
         Paciente p = pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
         return pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
     }
+
     public Paciente buscarPacientePorUsuario(Long id){
         Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
         return pacienteRepository.findPacienteByUsuario(usuario);
     }
 
+    /**
+     * Se for uma edição do paciente, o método carrega o tipo do papel e a senha
+     * @param paciente que está sendo editado
+     * @return paciente
+     */
     public Paciente verificarEdicao(Paciente paciente) {
         if(paciente.getId() == null){//não eh edição
             return paciente;
@@ -85,14 +98,23 @@ public class PacienteService {
         paciente.getPessoa().getUsuario().setEnumTipoPapel(paciente1.getPessoa().getUsuario().getEnumTipoPapel());
         paciente.getPessoa().getUsuario().setSenha(paciente1.getPessoa().getUsuario().getSenha());
 
-        if(Objects.isNull(paciente.getPessoa().getEndereco())){
+        if(Objects.isNull(paciente1.getPessoa().getEndereco())){
             paciente.getPessoa().setEndereco(null);
         }
 
-        return paciente1;
+        return paciente;
     }
 
+    /**
+     * Verifica se o usuário está editando o próprio cadastro
+     * @param paciente Paciente que será editado
+     * @throws NegocioException exceção lançada caso a edição não for permitida
+     */
     public void verificarPermissao(Paciente paciente) throws NegocioException{
+        if(paciente.getId() == null){ //eh usuário novo
+            return;
+        }
+
         Paciente pacienteLogado = buscarPacientePorUsuarioLogado();
 
         if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel() == EnumTipoPapel.VALIDADOR
