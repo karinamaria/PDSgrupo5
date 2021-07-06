@@ -1,7 +1,9 @@
 package br.ufrn.PDSgrupo5.service;
 
+import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.repository.PessoaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
@@ -10,8 +12,12 @@ import java.util.InputMismatchException;
 public class PessoaService {
     private PessoaRepository pessoaRepository;
 
-    public PessoaService(PessoaRepository pessoaRepository){
+    private UsuarioHelper usuarioHelper;
+
+    @Autowired
+    public PessoaService(PessoaRepository pessoaRepository, UsuarioHelper usuarioHelper){
         this.pessoaRepository = pessoaRepository;
+        this.usuarioHelper = usuarioHelper;
     }
 
     public Pessoa buscarPessoaPorCpf(String cpf){
@@ -20,6 +26,10 @@ public class PessoaService {
 
     public Pessoa buscarPessoaPorEmail(String email){
         return pessoaRepository.findByEmail(email);
+    }
+
+    public Pessoa buscarPessoaPorUsuarioLogado(){
+        return pessoaRepository.findByUsuario(usuarioHelper.getUsuarioLogado());
     }
 
     public boolean ehCpfValido(String cpf){

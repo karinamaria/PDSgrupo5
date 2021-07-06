@@ -70,7 +70,12 @@ public class ProfissionalSaudeController {
         return form(model);
     }
 
-    @GetMapping("/perfil")
+	/**
+	 * O profissional pode visualizar seu próprio perfil
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/perfil")
     public String visualizarPerfil(Model model){
         model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
         return "paginadevisualizacaoPerfil";

@@ -1,11 +1,6 @@
 package br.ufrn.PDSgrupo5.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -135,4 +135,12 @@ public class ProfissionalSaudeService {
         Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
         return profissionalSaudeRepository.findByUsuario(usuario);
     }
+
+    public List<ProfissionalSaude> listarProfissionaisStatusLegalizacao(boolean legalizado){
+		return profissionalSaudeRepository.findAllByLegalizado(legalizado);
+	}
+
+	public ProfissionalSaude buscarProfissioalPorId(Long id){
+		return profissionalSaudeRepository.findById(id).orElse(null);
+	}
 }

@@ -76,7 +76,6 @@ public class PacienteService {
     }
 
     public Paciente buscarPacientePorUsuarioLogado(){
-        Paciente p = pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
         return pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
     }
 

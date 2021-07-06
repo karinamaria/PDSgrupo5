@@ -1,5 +1,6 @@
 package br.ufrn.PDSgrupo5.model;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumSituacaoProfissionalSaude;
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
 
 import javax.persistence.*;
@@ -37,6 +38,10 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 	private List<TurnoAtendimento> turnoAtendimento;
 	
 	private boolean legalizado = false;
+
+	@Column(name="situacao_profissional")
+	@Enumerated(EnumType.STRING)
+	private EnumSituacaoProfissionalSaude situacaoProfissionalSaude;
 
 	public ProfissionalSaude() {
 	}
@@ -88,12 +93,20 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 	public void setTurnoAtendimento(List<TurnoAtendimento> turnoAtendimento) {
 		this.turnoAtendimento = turnoAtendimento;
 	}
-	
-	public boolean getLegalizado() {
+
+	public boolean isLegalizado() {
 		return legalizado;
 	}
-	
+
 	public void setLegalizado(boolean legalizado) {
 		this.legalizado = legalizado;
+	}
+
+	public EnumSituacaoProfissionalSaude getSituacaoProfissionalSaude() {
+		return situacaoProfissionalSaude;
+	}
+
+	public void setSituacaoProfissionalSaude(EnumSituacaoProfissionalSaude situacaoProfissionalSaude) {
+		this.situacaoProfissionalSaude = situacaoProfissionalSaude;
 	}
 }
