@@ -1,33 +1,82 @@
 <!DOCTYPE html>
 <html  lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
        xmlns:th="http://www.thymeleaf.org"
-       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</head>
-<body>
-    <div th:if="${param.error}">
-        Erro
-    </div>
-    <div class="wrapper fadeInDown">
-        <div id="formContent">
-            <!-- Login Form -->
-            <form th:action="@{/login}" method="post" class="mt-2">
-                <input type="text" id="login" class="fadeIn second" name="username" placeholder="login">
-                <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
-                <input type="submit" class="fadeIn fourth" value="Log In">
-            </form>
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorator="~{fragments/layout_principal}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
 
-            <!-- Remind Passowrd -->
-            <div id="formFooter">
-                <a class="underlineHover" href="#">Forgot Password?</a>
+        <style type="text/css">
+
+            #content-wrapper {
+                display: grid;
+                grid-template-columns: 0% 100%;
+                min-height: 1010px;
+            }
+
+            #form-login{
+                position: relative;
+                overflow: hidden;
+            }
+
+            @media (min-width: 576px) and (max-width: 767px) {
+                #content-wrapper {
+                    padding: 0px 90px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                #content-wrapper {
+                    grid-template-columns: 40% 60%;
+                }
+            }
+
+            @media (min-width: 992px) {
+                #content-wrapper {
+                    grid-template-columns: 50% 50%;
+                }
+            }
+
+            @media (min-width: 1200px) {
+                #content-wrapper {
+                    grid-template-columns: 60% 40%;
+                }
+            }
+
+        </style>
+
+    </head>
+
+    <body class="bg-light">
+        <th:block layout:fragment="content">
+            <div id="content-wrapper">
+                <div id="side-background" style="background-size: cover; background-image: url(/img/img_login.jpg); background-position-x: right;"></div>
+                <div id="forms-area" class="mt-5 pl-3 py-5 pr-5">
+                    <div id="form-login">
+                        <div th:if="${param.error}" class="text-center alert alert-danger">
+                            Usuário ou senha inválidos
+                        </div>
+                        <form class="ml-md-5 mr-md-5" th:action="@{/login}" method="post">
+                            <h2 class="text-secondary mb-4 text-center">Login</h2>
+                            <div class="form-group">
+                                <label for="login-username" class="label-custom">Usuário:</label>
+                                <input type="text" class="form-control" id="login-username" name="username" required="required"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Senha:</label>
+                                <input class="form-control" id="login-password" type="password" name="password" required="required"/>
+                            </div>
+
+                            <div class="form-group text-center mt-4">
+                                <button type="submit" class="btn btn-primary" value="Logar">Entrar</button>
+                            </div>
+
+                        </form>
+                        <small class="d-block text-center">Novo por aqui? <a href="#" class="text-uppercase font-weight-bold text-dark-blue" id="new-user">Cadastre-se!</a></small>
+                    </div>
+                </div>
             </div>
-
-        </div>
-    </div>
-</body>
+        </th:block>
+    </body>
 </html>
