@@ -9,40 +9,52 @@
 
         <style type="text/css">
 
-            #content-wrapper {
-                display: grid;
-                grid-template-columns: 0% 100%;
-                min-height: 1010px;
-            }
+            /*#content-wrapper {*/
+            /*    display: grid;*/
+            /*    grid-template-columns: 0% 100%;*/
+            /*    min-height: 1010px;*/
+            /*}*/
 
             #form-login{
                 position: relative;
                 overflow: hidden;
             }
 
-            @media (min-width: 576px) and (max-width: 767px) {
-                #content-wrapper {
-                    padding: 0px 90px;
-                }
+            a.form-tab {
+                color: #737f54;
             }
 
-            @media (min-width: 768px) {
-                #content-wrapper {
-                    grid-template-columns: 40% 60%;
-                }
+            a.form-tab.active {
+                color: #0000FF;
             }
 
-            @media (min-width: 992px) {
-                #content-wrapper {
-                    grid-template-columns: 50% 50%;
-                }
+            a.form-tab:hover, a.form-tab:focus {
+                color: #008B8B;
             }
 
-            @media (min-width: 1200px) {
-                #content-wrapper {
-                    grid-template-columns: 60% 40%;
-                }
-            }
+            /*@media (min-width: 576px) and (max-width: 767px) {*/
+            /*    #content-wrapper {*/
+            /*        padding: 0px 90px;*/
+            /*    }*/
+            /*}*/
+
+            /*@media (min-width: 768px) {*/
+            /*    #content-wrapper {*/
+            /*        grid-template-columns: 40% 60%;*/
+            /*    }*/
+            /*}*/
+
+            /*@media (min-width: 992px) {*/
+            /*    #content-wrapper {*/
+            /*        grid-template-columns: 50% 50%;*/
+            /*    }*/
+            /*}*/
+
+            /*@media (min-width: 1200px) {*/
+            /*    #content-wrapper {*/
+            /*        grid-template-columns: 60% 40%;*/
+            /*    }*/
+            /*}*/
 
         </style>
 
@@ -51,9 +63,11 @@
     <body class="bg-light">
         <th:block layout:fragment="content">
             <div id="content-wrapper">
+                <!--
                 <div id="side-background" style="background-size: cover; background-image: url(/img/img_login.jpg); background-position-x: right;"></div>
+                -->
                 <div id="forms-area" class="mt-5 pl-3 py-5 pr-5">
-                    <div id="form-login">
+                    <div id="form-login" th:styleappend="${active_tab} == null ? 'display:block': 'display:none'">
                         <div th:if="${param.error}" class="text-center alert alert-danger">
                             Usuário ou senha inválidos
                         </div>
@@ -73,10 +87,84 @@
                             </div>
 
                         </form>
-                        <small class="d-block text-center">Novo por aqui? <a href="#" class="text-uppercase font-weight-bold text-dark-blue" id="new-user">Cadastre-se!</a></small>
+                        <small class="d-block text-center">Novo por aqui? <a href="#" class="text-uppercase font-weight-bold text-dark-blue" id="btn-show-cadastro-form">Cadastre-se!</a></small>
+                    </div>
+
+
+                    <div id="form-cadastro" class="ml-md-5 mr-md-5"  th:styleappend="${active_tab} == null ? 'display:none': 'display:block'">
+                        <div th:if="${active_tab}">
+                            <input id="active_tab" type="hidden" th:value="${active_tab}" />
+                        </div>
+
+                        <h2 class="text-secondary mb-5 text-center">Cadastre-se</h2>
+                        <p th:text="${message}"></p>
+
+                        <nav class="nav nav-status justify-content-center pb-4">
+                            <a id="showPacienteForm" class="nav-link form-tab" th:classappend="${active_tab} == null or ${active_tab} == 'paciente' ? 'active'" href="#">PACIENTE</a>
+                            <a id="showProfissionalForm" class="nav-link form-tab" th:classappend="${active_tab} != null and ${active_tab} == 'profissioanl' ? 'active'" href="#">PROFISSIONAL</a>
+                        </nav>
+
+                        <div class="pacienteForm" th:styleappend="${active_tab} != null and ${active_tab} != 'candidato' ? 'display: none;'">
+                            Paciente
+                        </div>
+
+                        <div class="profissionalForm" th:styleappend="${active_tab} == null and ${active_tab} != 'profissional' ? 'display: none;'">
+                            Profissional
+                        </div>
+
+                        <small class="d-block text-center mt-2">Já possui uma conta? <a href="#" class="text-uppercase font-weight-bold text-dark-blue"id="btn-show-login-form">Faça login</a></small>
+
                     </div>
                 </div>
             </div>
+        </th:block>
+        <th:block layout:fragment="js">
+            <script>
+                $(function(){
+
+                    btnShowProfissionalForm = $("#showProfissionalForm");
+                    btnShowProfissionalForm.click(function(event){
+                        $(".pacienteForm").css("display", "none");
+                        $(".profissionalForm").css("display", "block");
+                        btnShowProfissionalForm.addClass("active");
+                        btnShowPacienteForm.removeClass("active");
+                        event.preventDefault();
+                    });
+
+                    btnShowPacienteForm = $("#showPacienteForm");
+                    btnShowPacienteForm.click(function(event){
+                        $(".pacienteForm").css("display", "block");
+                        $(".profissionalForm").css("display", "none");
+                        btnShowProfissionalForm.removeClass("active");
+                        btnShowPacienteForm.addClass("active");
+                        event.preventDefault();
+                    });
+
+                    activeTab = $("#active_tab").val();
+                    if (activeTab == 'paciente'){
+                        $(".pacienteForm").css("display", "block");
+                        $(".profissionalForm").css("display", "none");
+                        btnShowProfissionalForm.removeClass("active");
+                        btnShowPacienteForm.addClass("active");
+                    }
+
+                    btnShowCadastroForm = $('#btn-show-cadastro-form');
+                    btnShowCadastroForm.click(function() {
+                        $('#form-login').removeClass('selected');
+                        $('#form-login').css("display", "none");
+                        $('#form-cadastro').addClass('selected');
+                        $('#form-cadastro').css("display", "block");
+                    });
+
+                    btnShowLoginForm = $('#btn-show-login-form');
+                    btnShowLoginForm.click(function() {
+                        $('#form-login').addClass('selected');
+                        $('#form-login').css("display", "block");
+                        $('#form-cadastro').removeClass('selected');
+                        $('#form-cadastro').css("display", "none");
+                    });
+                });
+            </script>
         </th:block>
     </body>
 </html>

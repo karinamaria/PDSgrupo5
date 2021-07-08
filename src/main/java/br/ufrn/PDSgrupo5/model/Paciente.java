@@ -13,9 +13,6 @@ public class Paciente extends EntidadeAbstrata {
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Pessoa pessoa;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<Paciente> dependentes;
-
 	public Paciente() {
 	}
 
@@ -27,11 +24,4 @@ public class Paciente extends EntidadeAbstrata {
 		this.pessoa = pessoa;
 	}
 
-	public List<Paciente> getDependentes() {
-		return dependentes;
-	}
-
-	public void setDependentes(List<Paciente> dependentes) {
-		this.dependentes = dependentes;
-	}
 }

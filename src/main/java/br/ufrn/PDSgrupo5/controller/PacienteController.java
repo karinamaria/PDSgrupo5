@@ -37,15 +37,6 @@ public class PacienteController {
         return "paciente/form";
     }
 
-    @GetMapping("/formDependente")
-    public String formDependentes(Model model){
-        if(!model.containsAttribute("paciente")){
-            model.addAttribute(new Paciente());
-        }
-        return "paciente/formDependente";
-    }
-
-
     @PostMapping("/salvar")
     public String salvar(@Valid Paciente paciente, BindingResult br, Model model){
         try{
@@ -67,37 +58,12 @@ public class PacienteController {
         return "redirect:/login";
     }
 
-    public String salvarDependente(@Valid Paciente paciente, BindingResult br, Model model){
-        try{
-            pacienteService.verificarPermissao(paciente);
-
-            if(br.hasErrors()){
-                model.addAttribute("message", "Erro ao salvar dependente");
-                model.addAttribute(paciente);
-                return form(model);
-            }
-            paciente = pacienteService.verificarEdicao(paciente);
-            pacienteService.salvarPaciente(paciente);
-
-        }catch(NegocioException ne){
-            return "";
-        }
-        return "";
-    }
-
     //o usuário edita seu próprio cadastro
     @GetMapping("/editar")
     public String editar(Model model){
         model.addAttribute(pacienteService.buscarPacientePorUsuarioLogado());
         return form(model);
     }
-
-//    //usuário com papel "validador" pode editar qualquer paciente
-//    @GetMapping("/editarOutroUsuario/{id}")
-//    public String editarOutroPaciente(@PathVariable Long id, Model model){
-//        model.addAttribute(pacienteService.buscarPacientePorUsuario(id));
-//        return form(model);
-//    }
 
     @GetMapping("/perfil")
     public String visualizarPerfil(Model model){
