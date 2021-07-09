@@ -25,6 +25,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/index").permitAll()
                 .antMatchers("/novo-paciente/salvar").permitAll()
+                .antMatchers("/novo-profissional/salvar").permitAll()
                 .anyRequest().authenticated();
     }
     private void secureStaticResources(HttpSecurity http) throws Exception{

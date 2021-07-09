@@ -19,8 +19,6 @@ public class Endereco extends EntidadeAbstrata {
 
 	private String cep;
 
-	private String pais;
-
 	public Endereco() {
 	}
 
@@ -70,13 +68,5 @@ public class Endereco extends EntidadeAbstrata {
 
 	public void setCep(String cep) {
 		this.cep = cep;
-	}
-
-	public String getPais() {
-		return pais;
-	}
-
-	public void setPais(String pais) {
-		this.pais = pais;
 	}
 }
