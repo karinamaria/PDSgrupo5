@@ -1,5 +1,6 @@
 package br.ufrn.PDSgrupo5.controller;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -91,8 +93,26 @@ public class PacienteController {
     @GetMapping("/buscarProfissional")
     public ModelAndView buscarProfissional() {
     	ModelAndView mv = new ModelAndView("paciente/buscarProfissional");
-    	List<ProfissionalSaude> profissionais = profissionalSaudeService.listarProfissionaisStatusAtivo(true);
-    	mv.addObject("listaProfissionaisAtivos", profissionais);
+    	List<ProfissionalSaude> profissionais = profissionalSaudeService.listarProfissionaisStatusLegalizacao(true);
+    	mv.addObject("listaProfissionais", profissionais);
+    	return mv;
+    }
+    
+    @PostMapping("/buscar")
+    public ModelAndView buscar(@RequestParam("nomeProfissional") String nome, @RequestParam("categoriaProfissional") String categoria) {
+    	ModelAndView mv = new ModelAndView("paciente/buscarProfissional");
+    	if(nome.equals("")) {
+    		nome = null;
+    	}
+    	
+    	List<ProfissionalSaude> profissionais;
+    	if(categoria.equals("Todos")){
+    		profissionais = profissionalSaudeService.buscarPorFiltro(true, nome, null);
+    	} else {
+    		profissionais = profissionalSaudeService.buscarPorFiltro(true, nome, EnumTipoRegistro.valueOf(categoria));
+    	}
+    	
+    	mv.addObject("listaProfissionais", profissionais);
     	return mv;
     }
 }

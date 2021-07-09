@@ -1,13 +1,17 @@
 package br.ufrn.PDSgrupo5.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.criteria.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
@@ -141,11 +145,22 @@ public class ProfissionalSaudeService {
 		return profissionalSaudeRepository.findAllByLegalizado(legalizado);
 	}
     
-    public List<ProfissionalSaude> listarProfissionaisStatusAtivo(boolean ativo){
-    	return profissionalSaudeRepository.findAllByAtivo(ativo);
-    }
-
 	public ProfissionalSaude buscarProfissioalPorId(Long id){
 		return profissionalSaudeRepository.findById(id).orElse(null);
 	}
+	
+	public List<ProfissionalSaude> buscarPorFiltro(boolean legalizado, String nome, EnumTipoRegistro enumTipoRegistro){
+       return profissionalSaudeRepository.findAll((root, query, criteriaBuilder) -> {
+	       List<Predicate> predicates = new ArrayList<>();
+	       
+	       predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("legalizado"), legalizado)));
+	       if(nome != null) {
+	           predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("pessoa").get("nome"), "%"+nome+"%")));
+	       }
+	       if(enumTipoRegistro != null){
+	           predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("enumTipoRegistro"), enumTipoRegistro)));
+	       }
+	       return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+	   });
+   }
 }
