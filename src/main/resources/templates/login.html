@@ -15,11 +15,6 @@
         /*    min-height: 1010px;*/
         /*}*/
 
-        #form-login {
-            position: relative;
-            overflow: hidden;
-        }
-
         a.form-tab {
             color: #737f54;
         }
@@ -62,7 +57,7 @@
 
 <body class="bg-light">
 <th:block layout:fragment="content">
-    <div id="content-wrapper">
+    <div id="content-wrapper mb-5">
         <!--
         <div id="side-background" style="background-size: cover; background-image: url(/img/img_login.jpg); background-position-x: right;"></div>
         -->
@@ -71,14 +66,14 @@
                 <div th:if="${param.error}" class="text-center alert alert-danger">
                     Usuário ou senha inválidos
                 </div>
-                <form class="ml-md-5 mr-md-5" th:action="@{/login}" method="post">
+                <form class="ml-md-5 mr-md-5 mb-5" th:action="@{/login}" method="post">
                     <h2 class="text-secondary mb-4 text-center">Login</h2>
-                    <div class="form-group">
+                    <div class="form-group col-6 mx-auto">
                         <label for="login-username" class="label-custom">Usuário:</label>
                         <input type="text" class="form-control" id="login-username" name="username"
                                required="required"/>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-6 mx-auto">
                         <label for="login-password">Senha:</label>
                         <input class="form-control" id="login-password" type="password" name="password"
                                required="required"/>
@@ -87,11 +82,11 @@
                     <div class="form-group text-center mt-4">
                         <button type="submit" class="btn btn-primary" value="Logar">Entrar</button>
                     </div>
-
+                    <small class="d-block text-center">Novo por aqui?
+                        <a href="#" class="text-uppercase font-weight-bold text-dark-blue" id="btn-show-cadastro-form">Cadastre-se!</a>
+                    </small>
                 </form>
-                <small class="d-block text-center">Novo por aqui? <a href="#"
-                                                                     class="text-uppercase font-weight-bold text-dark-blue"
-                                                                     id="btn-show-cadastro-form">Cadastre-se!</a></small>
+
             </div>
 
 
