@@ -24,8 +24,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         secureLogin(http);
         http.authorizeRequests()
                 .antMatchers("/index").permitAll()
-                .antMatchers("paciente/form").permitAll()
-                .antMatchers("paciente/salvar").permitAll()
+                .antMatchers("/novo-paciente/salvar").permitAll()
                 .anyRequest().authenticated();
     }
     private void secureStaticResources(HttpSecurity http) throws Exception{
