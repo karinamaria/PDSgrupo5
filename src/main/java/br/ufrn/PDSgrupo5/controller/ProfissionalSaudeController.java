@@ -9,10 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
@@ -37,7 +35,7 @@ public class ProfissionalSaudeController {
 	}
 	
 	@PostMapping("/cadastrar")
-	public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
+	public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, Model model) {
 		try{
 			profissionalSaudeService.verificarPermissao(profissionalSaude);
 			br = profissionalSaudeService.validarDados(profissionalSaude, br);
@@ -56,32 +54,19 @@ public class ProfissionalSaudeController {
 		return "redirect:/login";
 	}
 	
-	//o usuário edita seu próprio cadastro
     @GetMapping("/editar")
     public String editar(Model model){
         model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
         return form(model);
     }
-
-    //usuário com papel "validador" pode editar qualquer profissional da saúde
-    @GetMapping("/editar-usuario/{id}")
-    public String editarOutroPaciente(@PathVariable Long id, Model model){
-        model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuario(id));
-        return form(model);
-    }
-
-	/**
-	 * O profissional pode visualizar seu próprio perfil
-	 * @param model
-	 * @return
-	 */
+    
 	@GetMapping("/perfil")
     public String visualizarPerfil(Model model){
         model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
         return "paginadevisualizacaoPerfil";
     }
 
-    @DeleteMapping("/excluir-perfil")
+    @DeleteMapping("/excluirPerfil")
     public String excluirPerfil(){
         ProfissionalSaude ps = profissionalSaudeService.buscarProfissionalPorUsuarioLogado();
         ps.setAtivo(false);

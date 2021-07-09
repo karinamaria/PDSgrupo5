@@ -42,6 +42,7 @@ public class ProfissionalSaudeService {
 	public void cadastrar(ProfissionalSaude ps) {
 		ps.setAtivo(true);
 		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
+		ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
 		salvar(ps);
 	}
 	
@@ -139,6 +140,10 @@ public class ProfissionalSaudeService {
     public List<ProfissionalSaude> listarProfissionaisStatusLegalizacao(boolean legalizado){
 		return profissionalSaudeRepository.findAllByLegalizado(legalizado);
 	}
+    
+    public List<ProfissionalSaude> listarProfissionaisStatusAtivo(boolean ativo){
+    	return profissionalSaudeRepository.findAllByAtivo(ativo);
+    }
 
 	public ProfissionalSaude buscarProfissioalPorId(Long id){
 		return profissionalSaudeRepository.findById(id).orElse(null);

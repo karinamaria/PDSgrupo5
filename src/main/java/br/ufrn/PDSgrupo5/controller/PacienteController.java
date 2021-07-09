@@ -2,7 +2,10 @@ package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.Paciente;
+import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.PacienteService;
+import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +14,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -18,10 +24,12 @@ import javax.validation.Valid;
 @RequestMapping("paciente")
 public class PacienteController {
     private PacienteService pacienteService;
+    private ProfissionalSaudeService profissionalSaudeService;
 
     @Autowired
-    public PacienteController(PacienteService pacienteService){
+    public PacienteController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService){
         this.pacienteService = pacienteService;
+        this.profissionalSaudeService = profissionalSaudeService;
     }
 
     @GetMapping
@@ -84,7 +92,7 @@ public class PacienteController {
         }
         return "";
     }
-
+    
     //o usuário edita seu próprio cadastro
     @GetMapping("/editar")
     public String editar(Model model){
@@ -104,7 +112,7 @@ public class PacienteController {
         model.addAttribute(pacienteService.buscarPacientePorUsuarioLogado());
         return "paginadevisualizacaoPerfil";
     }
-
+    
     @DeleteMapping("/excluirPerfil")
     public String excluirPerfil(){
         Paciente paciente = pacienteService.buscarPacientePorUsuarioLogado();
@@ -113,5 +121,12 @@ public class PacienteController {
 
         return "/login";
     }
-
+    
+    @GetMapping("/buscarProfissional")
+    public ModelAndView buscarProfissional() {
+    	ModelAndView mv = new ModelAndView("paciente/buscarProfissional");
+    	List<ProfissionalSaude> profissionais = profissionalSaudeService.listarProfissionaisStatusAtivo(true);
+    	mv.addObject("listaProfissionaisAtivos", profissionais);
+    	return mv;
+    }
 }
