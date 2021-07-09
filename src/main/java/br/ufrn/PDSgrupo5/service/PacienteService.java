@@ -66,6 +66,9 @@ public class PacienteService {
         if(usuarioService.loginJaExiste(paciente.getPessoa().getUsuario())){
             br.rejectValue("pessoa.usuario.login", "","Login já existe");
         }
+        if(paciente.getPessoa().getUsuario().getLogin().length() < 5){
+            br.rejectValue("pessoa.usuario.login", "", "O login deve ter pelo menos cinco caracteres");
+        }
         pessoa = pessoaService.buscarPessoaPorEmail(paciente.getPessoa().getEmail());
         if(Objects.nonNull(pessoa)){
             if(pessoa.getId() != paciente.getPessoa().getId()){

@@ -20,14 +20,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        secureStaticResources(http);
         secureLogin(http);
         http.authorizeRequests()
-                .antMatchers("paciente/form").permitAll()
-                .antMatchers("paciente/salvar").permitAll()
-                .antMatchers("paciente/editarOutroUsuario/*").hasAnyAuthority(EnumTipoPapel.VALIDADOR.getDescricao());
-                //.anyRequest().hasAnyAuthority(EnumTipoPapel.VALIDADOR.getDescricao());
+                .antMatchers("/index").permitAll()
+                .antMatchers("/novo-paciente/salvar").permitAll()
+                .anyRequest().authenticated();
     }
-
+    private void secureStaticResources(HttpSecurity http) throws Exception{
+        http
+                .authorizeRequests()
+                .antMatchers("/img/**").permitAll()
+                .antMatchers("/css/**", "/js/**","/fonts/**","/fragments/**").permitAll();
+    }
     private void secureLogin(HttpSecurity http) throws Exception{
         http.formLogin()
                 .loginPage("/login").successHandler(autenticacaoSucessoHandler)
