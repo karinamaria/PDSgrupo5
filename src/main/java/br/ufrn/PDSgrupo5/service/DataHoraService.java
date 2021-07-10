@@ -34,6 +34,7 @@ public class DataHoraService {
 				break;
 			case 3:
 				diaSemana = "Terça-feira";
+				break;
 			case 4:
 				diaSemana = "Quarta-feira";
 				break;
