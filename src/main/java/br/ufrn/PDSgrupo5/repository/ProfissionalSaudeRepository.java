@@ -19,5 +19,4 @@ public interface ProfissionalSaudeRepository extends JpaRepository<ProfissionalS
 	List<ProfissionalSaude> findAllByLegalizado(boolean legalizado);
 	
 	List<ProfissionalSaude> findAllByEnumTipoRegistro(EnumTipoRegistro enumTipoRegistro);
-	
 }

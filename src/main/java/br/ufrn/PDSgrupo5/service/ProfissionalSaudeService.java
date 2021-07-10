@@ -16,6 +16,7 @@ import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.model.TurnoAtendimento;
 import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.repository.ProfissionalSaudeRepository;
 
@@ -163,4 +164,15 @@ public class ProfissionalSaudeService {
 	       return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
 	   });
    }
+
+	public ProfissionalSaude adicionarTurnoAtendimento(TurnoAtendimento ta) {
+		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
+		ps.getTurnoAtendimento().add(ta);
+		return salvar(ps);
+	}
+
+	public List<TurnoAtendimento> buscarTurnosAtendimento() {
+		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
+		return ps.getTurnoAtendimento();
+	}
 }

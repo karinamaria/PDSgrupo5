@@ -1,5 +1,9 @@
 package br.ufrn.PDSgrupo5.controller;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Objects;
+
 import javax.validation.Valid;
 
 import br.ufrn.PDSgrupo5.exception.NegocioException;
@@ -11,18 +15,27 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.model.TurnoAtendimento;
+import br.ufrn.PDSgrupo5.service.DataHoraService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
+import br.ufrn.PDSgrupo5.service.TurnoAtendimentoService;
 
 @Controller
 @RequestMapping("profissional-saude")
 public class ProfissionalSaudeController {
 	private ProfissionalSaudeService profissionalSaudeService;
+	private TurnoAtendimentoService turnoAtendimentoService;
+	private DataHoraService dataHoraService;
 	
 	@Autowired
-	ProfissionalSaudeController(ProfissionalSaudeService profissionalSaudeService){
+	ProfissionalSaudeController(ProfissionalSaudeService profissionalSaudeService, TurnoAtendimentoService turnoAtendimentoService,
+								DataHoraService dataHoraService){
 		this.profissionalSaudeService = profissionalSaudeService;
+		this.turnoAtendimentoService = turnoAtendimentoService;
+		this.dataHoraService = dataHoraService;
 	}
 	
 	@GetMapping("/form")
@@ -73,5 +86,34 @@ public class ProfissionalSaudeController {
         profissionalSaudeService.salvar(ps);
 
         return "/login";
+    }
+    
+    @GetMapping("/formTurnoAtendimento")
+    public String formTurnoAtendimento(Model model) {
+    	return "profissional-saude/formTurnoAtendimento";
+    }
+    
+    @PostMapping("/addTurnoAtendimento")
+    public String addTurnoAtendimento(@RequestParam("data") String data, @RequestParam("horaInicio") String horaInicio,
+    								  @RequestParam("horaFim") String horaFim, Model model) {
+    	
+		try {
+			Date horarioInicio = dataHoraService.converterParaDate(data, horaInicio);
+			Date horarioFim = dataHoraService.converterParaDate(data, horaFim);
+			TurnoAtendimento ta = turnoAtendimentoService.converterParaTurnoAtendimento(horarioInicio, horarioFim);
+			
+			String erro = turnoAtendimentoService.validarTurno(ta);
+			if(Objects.nonNull(erro)) {
+				model.addAttribute("mensagemErro", erro);
+				return formTurnoAtendimento(model);
+			}
+			
+			profissionalSaudeService.adicionarTurnoAtendimento(ta);
+			
+		} catch (ParseException e) {
+			return "redirect:/profissional-saude/error";
+		}
+    	
+    	return "redirect:/profissional-saude/principal";
     }
 }
