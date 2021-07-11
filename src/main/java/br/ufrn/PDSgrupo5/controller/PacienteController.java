@@ -55,7 +55,7 @@ public class PacienteController {
             return "";
         }
         //se for edição, deve retornar para página diferente
-        return "redirect:/login";
+        return "redirect:/dashboard";
     }
 
     //o usuário edita seu próprio cadastro
@@ -77,7 +77,7 @@ public class PacienteController {
         paciente.setAtivo(false);
         pacienteService.salvar(paciente);
 
-        return "/login";
+        return "redirect:/login";
     }
 
 }
