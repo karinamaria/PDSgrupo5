@@ -39,7 +39,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").successHandler(autenticacaoSucessoHandler)
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl(pageLogoutSucess())
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl(pageLogoutSucess())
                 .permitAll();
 
     }
@@ -50,7 +52,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     protected String pageLogoutSucess() {
-        return "/";
+        return "/login";
     }
 
 }

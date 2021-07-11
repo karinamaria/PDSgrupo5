@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -25,6 +27,11 @@ public class HomeController {
     public HomeController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService){
         this.pacienteService = pacienteService;
         this.profissionalSaudeService = profissionalSaudeService;
+    }
+
+    @RequestMapping("/dashboard")
+    public String dashBoard(Model model){
+        return "dashboard";
     }
 
     @RequestMapping("/login")
@@ -92,6 +99,4 @@ public class HomeController {
 
         return "redirect:/login";
     }
-
-
 }
