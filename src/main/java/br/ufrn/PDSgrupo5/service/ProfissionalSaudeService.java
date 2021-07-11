@@ -42,6 +42,7 @@ public class ProfissionalSaudeService {
 	public void cadastrar(ProfissionalSaude ps) {
 		ps.setAtivo(true);
 		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
+		ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
 		salvar(ps);
 	}
 	
@@ -82,39 +83,22 @@ public class ProfissionalSaudeService {
 	}
 	
 	public ProfissionalSaude verificarEdicao(ProfissionalSaude ps) {
-		if(ps.getId() == null){
-            return ps;
-        }
-		
-        ProfissionalSaude psAux = profissionalSaudeRepository.findById(ps.getId()).get();
-        ps.getPessoa().getUsuario().setEnumTipoPapel(psAux.getPessoa().getUsuario().getEnumTipoPapel());
-        ps.getPessoa().getUsuario().setSenha(psAux.getPessoa().getUsuario().getSenha());
+        ProfissionalSaude psAux = buscarProfissionalPorUsuarioLogado();
+		//nenhum atributo do usuário será modificado na edição
+		ps.getPessoa().setUsuario(psAux.getPessoa().getUsuario());
+
+		ps.setId(psAux.getId());
+		ps.getPessoa().setId(psAux.getPessoa().getId());
 
         if(Objects.isNull(ps.getPessoa().getEndereco())){
             ps.getPessoa().setEndereco(null);
-        }
-
-        return psAux;
-	}
-	
-	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{
-		if(ps.getId() == null){ //eh usuário novo
-			return;
+        }else{
+        	ps.getPessoa().getEndereco().setId(psAux.getPessoa().getEndereco().getId());
 		}
 
-        ProfissionalSaude psLogado = buscarProfissionalPorUsuarioLogado();
+        return ps;
+	}
 
-        if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel() == EnumTipoPapel.VALIDADOR
-            || ps.getId() == null){
-            return;
-        }
-
-        if( ps.getId() != psLogado.getId() || ps.getPessoa().getId() != psLogado.getPessoa().getId()
-            || ps.getPessoa().getUsuario().getId() != psLogado.getPessoa().getUsuario().getId()){
-            throw new NegocioException("Você não tem permissão para editar esse usuário");
-        }
-    }
-	
 	public List<ProfissionalSaude> listarTodosProfissionais(){
 		return profissionalSaudeRepository.findAll();
 	}
@@ -142,5 +126,23 @@ public class ProfissionalSaudeService {
 
 	public ProfissionalSaude buscarProfissioalPorId(Long id){
 		return profissionalSaudeRepository.findById(id).orElse(null);
+	}
+
+	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{
+		if(ps.getId() == null){ //eh usuário novo
+			return;
+		}
+
+		ProfissionalSaude psLogado = buscarProfissionalPorUsuarioLogado();
+
+		if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel() == EnumTipoPapel.VALIDADOR
+				|| ps.getId() == null){
+			return;
+		}
+
+		if( ps.getId() != psLogado.getId() || ps.getPessoa().getId() != psLogado.getPessoa().getId()
+				|| ps.getPessoa().getUsuario().getId() != psLogado.getPessoa().getUsuario().getId()){
+			throw new NegocioException("Você não tem permissão para editar esse usuário");
+		}
 	}
 }
