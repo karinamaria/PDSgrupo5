@@ -1,17 +1,22 @@
 package br.ufrn.PDSgrupo5.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.criteria.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.model.TurnoAtendimento;
 import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.repository.ProfissionalSaudeRepository;
 
@@ -42,6 +47,7 @@ public class ProfissionalSaudeService {
 	public void cadastrar(ProfissionalSaude ps) {
 		ps.setAtivo(true);
 		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
+		ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
 		salvar(ps);
 	}
 	
@@ -139,8 +145,34 @@ public class ProfissionalSaudeService {
     public List<ProfissionalSaude> listarProfissionaisStatusLegalizacao(boolean legalizado){
 		return profissionalSaudeRepository.findAllByLegalizado(legalizado);
 	}
-
+    
 	public ProfissionalSaude buscarProfissioalPorId(Long id){
 		return profissionalSaudeRepository.findById(id).orElse(null);
+	}
+	
+	public List<ProfissionalSaude> buscarPorFiltro(boolean legalizado, String nome, EnumTipoRegistro enumTipoRegistro){
+       return profissionalSaudeRepository.findAll((root, query, criteriaBuilder) -> {
+	       List<Predicate> predicates = new ArrayList<>();
+	       
+	       predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("legalizado"), legalizado)));
+	       if(nome != null) {
+	           predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("pessoa").get("nome"), "%"+nome+"%")));
+	       }
+	       if(enumTipoRegistro != null){
+	           predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("enumTipoRegistro"), enumTipoRegistro)));
+	       }
+	       return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+	   });
+   }
+
+	public ProfissionalSaude adicionarTurnoAtendimento(TurnoAtendimento ta) {
+		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
+		ps.getTurnoAtendimento().add(ta);
+		return salvar(ps);
+	}
+
+	public List<TurnoAtendimento> buscarTurnosAtendimento() {
+		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
+		return ps.getTurnoAtendimento();
 	}
 }
