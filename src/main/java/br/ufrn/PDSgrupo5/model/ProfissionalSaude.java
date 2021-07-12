@@ -33,9 +33,9 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 	@Enumerated(EnumType.STRING)
 	private EnumTipoRegistro enumTipoRegistro;
 
-	@Column(name="turno_atendimento")
+	@Column(name="horario_atendimento")
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<TurnoAtendimento> turnoAtendimento;
+	private List<HorarioAtendimento> horarioAtendimento;
 	
 	private boolean legalizado = false;
 
@@ -86,12 +86,12 @@ public class ProfissionalSaude extends EntidadeAbstrata {
 		this.enumTipoRegistro = enumTipoRegistro;
 	}
 
-	public List<TurnoAtendimento> getTurnoAtendimento() {
-		return turnoAtendimento;
+	public List<HorarioAtendimento> getHorarioAtendimento() {
+		return horarioAtendimento;
 	}
 
-	public void setTurnoAtendimento(List<TurnoAtendimento> turnoAtendimento) {
-		this.turnoAtendimento = turnoAtendimento;
+	public void setHorarioAtendimento(List<HorarioAtendimento> horarioAtendimento) {
+		this.horarioAtendimento = horarioAtendimento;
 	}
 
 	public boolean isLegalizado() {

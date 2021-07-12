@@ -17,7 +17,7 @@ import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
-import br.ufrn.PDSgrupo5.model.TurnoAtendimento;
+import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
 import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.repository.ProfissionalSaudeRepository;
 
@@ -152,15 +152,15 @@ public class ProfissionalSaudeService {
 	   });
    }
 
-	public ProfissionalSaude adicionarTurnoAtendimento(TurnoAtendimento ta) {
+	public ProfissionalSaude adicionarHorarioAtendimento(HorarioAtendimento ha) {
 		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
-		ps.getTurnoAtendimento().add(ta);
+		ps.getHorarioAtendimento().add(ha);
 		return salvar(ps);
 	}
 
-	public List<TurnoAtendimento> buscarTurnosAtendimento() {
+	public List<HorarioAtendimento> buscarHorariosAtendimento() {
 		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
-		return ps.getTurnoAtendimento();
+		return ps.getHorarioAtendimento();
 	}
 
 	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{

@@ -9,13 +9,9 @@ import java.util.Date;
 @Entity
 @Table(name = "atendimento")
 public class Atendimento extends EntidadeAbstrata {
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Column(name = "horario", nullable=true)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date horario;
-
-	private Integer duracao;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private HorarioAtendimento horarioAtendimento;
 
 	private Double preco;
 
@@ -38,22 +34,14 @@ public class Atendimento extends EntidadeAbstrata {
 	public Atendimento() {
 	}
 
-	public Date getHorario() {
-		return horario;
+	public HorarioAtendimento getHorarioAtendimento() {
+		return horarioAtendimento;
 	}
 
-	public void setHorario(Date horario) {
-		this.horario = horario;
+	public void setHorarioatendimento(HorarioAtendimento horarioAtendimento) {
+		this.horarioAtendimento = horarioAtendimento;
 	}
-
-	public Integer getDuracao() {
-		return duracao;
-	}
-
-	public void setDuracao(Integer duracao) {
-		this.duracao = duracao;
-	}
-
+	
 	public Double getPreco() {
 		return preco;
 	}
