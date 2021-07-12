@@ -82,6 +82,10 @@ public class PacienteService {
         return pacienteRepository.findPacienteByUsuario(usuarioHelper.getUsuarioLogado());
     }
 
+    public void excluirPaciente(Paciente paciente){
+        pacienteRepository.delete(paciente);
+    }
+
     public Paciente buscarPacientePorUsuario(Long id){
         Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
         return pacienteRepository.findPacienteByUsuario(usuario);
@@ -93,15 +97,17 @@ public class PacienteService {
      * @return paciente
      */
     public Paciente verificarEdicao(Paciente paciente) {
-        if(paciente.getId() == null){//não eh edição
-            return paciente;
-        }
-        Paciente paciente1 = pacienteRepository.findById(paciente.getId()).get();
-        paciente.getPessoa().getUsuario().setEnumTipoPapel(paciente1.getPessoa().getUsuario().getEnumTipoPapel());
-        paciente.getPessoa().getUsuario().setSenha(paciente1.getPessoa().getUsuario().getSenha());
+        Paciente paciente1 = buscarPacientePorUsuarioLogado();
+        //nenhum atributo do usuário será modificado na edição
+        paciente.getPessoa().setUsuario(paciente1.getPessoa().getUsuario());
+
+        paciente.setId(paciente1.getId());
+        paciente.getPessoa().setId(paciente1.getPessoa().getId());
 
         if(Objects.isNull(paciente1.getPessoa().getEndereco())){
             paciente.getPessoa().setEndereco(null);
+        }else{
+            paciente.getPessoa().getEndereco().setId(paciente1.getPessoa().getEndereco().getId());
         }
 
         return paciente;

@@ -26,7 +26,6 @@ public class TurnoAtendimentoService {
 	
 	public String validarTurno(TurnoAtendimento ta) {
 		if(ta.getHorarioInicio().compareTo(ta.getHorarioFim()) >= 0) {
-			System.out.println("Dif: " + ta.getHorarioInicio().compareTo(ta.getHorarioFim()));
 			return "Turno inválido. O horário de início deve ser anterior ao de fim e eles não podem ser iguais.";
 		}
 		

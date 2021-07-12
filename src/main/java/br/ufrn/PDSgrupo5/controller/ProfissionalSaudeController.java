@@ -4,24 +4,20 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.validation.Valid;
-
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.model.TurnoAtendimento;
 import br.ufrn.PDSgrupo5.service.DataHoraService;
-import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import br.ufrn.PDSgrupo5.service.TurnoAtendimentoService;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("profissional-saude")
@@ -47,45 +43,56 @@ public class ProfissionalSaudeController {
 		return "profissional-saude/form";
 	}
 	
-	@PostMapping("/cadastrar")
-	public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, Model model) {
-		try{
-			profissionalSaudeService.verificarPermissao(profissionalSaude);
-			br = profissionalSaudeService.validarDados(profissionalSaude, br);
+    @PostMapping("/cadastrar")
+    public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
 
-			if(br.hasErrors()) {
-				model.addAttribute("message", "Erro ao cadastrar profissional da saúde");
-				model.addAttribute(profissionalSaude);
-				return form(model);
-			}
+        profissionalSaude = profissionalSaudeService.verificarEdicao(profissionalSaude);
+        br = profissionalSaudeService.validarDados(profissionalSaude, br);
 
-			profissionalSaudeService.cadastrar(profissionalSaude);
-		}catch(NegocioException ne){
-			return "";
-		}
+        if (br.hasErrors()) {
+            model.addAttribute("message", "Erro ao cadastrar profissional da saúde");
+            model.addAttribute(profissionalSaude);
+            return form(model);
+        }
 
-		return "redirect:/login";
-	}
-	
+        profissionalSaudeService.salvar(profissionalSaude);
+
+
+        return "redirect:/dashboard";
+    }
+
+    //o usuário edita seu próprio cadastro
     @GetMapping("/editar")
-    public String editar(Model model){
+    public String editar(Model model) {
         model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
+        return "profissional-saude/form";
+    }
+
+    //usuário com papel "validador" pode editar qualquer profissional da saúde
+    @GetMapping("/editar-usuario/{id}")
+    public String editarOutroProfissional(@PathVariable Long id, Model model) {
+        model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuario(id));
         return form(model);
     }
-    
-	@GetMapping("/perfil")
-    public String visualizarPerfil(Model model){
+
+    /**
+     * O profissional pode visualizar seu próprio perfil
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/perfil")
+    public String visualizarPerfil(Model model) {
         model.addAttribute(profissionalSaudeService.buscarProfissionalPorUsuarioLogado());
         return "paginadevisualizacaoPerfil";
     }
-
+    
     @DeleteMapping("/excluirPerfil")
     public String excluirPerfil(){
         ProfissionalSaude ps = profissionalSaudeService.buscarProfissionalPorUsuarioLogado();
-        ps.setAtivo(false);
-        profissionalSaudeService.salvar(ps);
+        profissionalSaudeService.excluir(ps);
 
-        return "/login";
+        return "redirect:/login";
     }
     
     @GetMapping("/formTurnoAtendimento")

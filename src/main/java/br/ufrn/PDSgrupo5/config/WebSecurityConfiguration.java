@@ -26,6 +26,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/index").permitAll()
                 .antMatchers("/novo-paciente/salvar").permitAll()
                 .antMatchers("/novo-profissional/salvar").permitAll()
+                .antMatchers("/paciente/**").hasAuthority(EnumTipoPapel.PACIENTE.getDescricao())
                 .anyRequest().authenticated();
     }
     private void secureStaticResources(HttpSecurity http) throws Exception{
@@ -39,7 +40,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").successHandler(autenticacaoSucessoHandler)
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl(pageLogoutSucess())
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl(pageLogoutSucess())
                 .permitAll();
 
     }
@@ -50,7 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     protected String pageLogoutSucess() {
-        return "/";
+        return "/login";
     }
 
 }

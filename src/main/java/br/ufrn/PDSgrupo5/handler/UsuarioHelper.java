@@ -1,5 +1,6 @@
 package br.ufrn.PDSgrupo5.handler;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.model.Usuario;
 import br.ufrn.PDSgrupo5.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +41,29 @@ public class UsuarioHelper {
             return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return null;
     }
+
+    @ModelAttribute("isPaciente")
+    public boolean verificaPapelPaciente(){
+        if(getUsuarioLogado() != null){
+            return getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.PACIENTE);
+        }
+        return false;
+    }
+
+    @ModelAttribute("isProfissional")
+    public boolean verificaPapelProfissional(){
+        if(getUsuarioLogado() != null){
+            return getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.PROFISSIONAL_SAUDE);
+        }
+        return false;
+    }
+
+    @ModelAttribute("isValidador")
+    public boolean verificaPapelValidador(){
+        if(getUsuarioLogado() != null){
+            return getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.VALIDADOR);
+        }
+        return false;
+    }
+
 }

@@ -1,7 +1,7 @@
 package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.PacienteService;
@@ -49,30 +49,26 @@ public class PacienteController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid Paciente paciente, BindingResult br, Model model){
-        try{
-            pacienteService.verificarPermissao(paciente);
-            br = pacienteService.validarPaciente(paciente, br);
 
-            if(br.hasErrors()){
-                model.addAttribute("message", "Erro ao salvar paciente");
-                model.addAttribute(paciente);
-                return form(model);
-            }
-            paciente = pacienteService.verificarEdicao(paciente);
-            pacienteService.salvarPaciente(paciente);
+        paciente = pacienteService.verificarEdicao(paciente);
 
-        }catch(NegocioException ne){
-            return "";
+        br = pacienteService.validarPaciente(paciente, br);
+
+        if(br.hasErrors()){
+            model.addAttribute("message", "Erro ao salvar paciente");
+            model.addAttribute(paciente);
+            return form(model);
         }
-        //se for edição, deve retornar para página diferente
-        return "redirect:/login";
+        pacienteService.salvarPaciente(paciente);
+
+        return "redirect:/dashboard";
     }
     
     //o usuário edita seu próprio cadastro
     @GetMapping("/editar")
     public String editar(Model model){
         model.addAttribute(pacienteService.buscarPacientePorUsuarioLogado());
-        return form(model);
+        return "paciente/form";
     }
 
     @GetMapping("/perfil")
@@ -84,10 +80,10 @@ public class PacienteController {
     @DeleteMapping("/excluirPerfil")
     public String excluirPerfil(){
         Paciente paciente = pacienteService.buscarPacientePorUsuarioLogado();
-        paciente.setAtivo(false);
-        pacienteService.salvar(paciente);
 
-        return "/login";
+        pacienteService.excluirPaciente(paciente);
+
+        return "redirect:/login";
     }
     
     @GetMapping("/buscarProfissional")

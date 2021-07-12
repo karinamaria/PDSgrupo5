@@ -1,6 +1,8 @@
 package br.ufrn.PDSgrupo5.controller;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.PacienteService;
@@ -21,10 +23,22 @@ public class HomeController {
 
     private ProfissionalSaudeService profissionalSaudeService;
 
+    private UsuarioHelper usuarioHelper;
+
     @Autowired
-    public HomeController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService){
+    public HomeController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService,
+                          UsuarioHelper usuarioHelper){
         this.pacienteService = pacienteService;
         this.profissionalSaudeService = profissionalSaudeService;
+        this.usuarioHelper = usuarioHelper;
+    }
+
+    @RequestMapping("/dashboard")
+    public String dashBoard(Model model){
+        if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.VALIDADOR)){
+            model.addAttribute("profissionais", profissionalSaudeService.listarProfissionaisStatusLegalizacao(false));
+        }
+        return "dashboard";
     }
 
     @RequestMapping("/login")
@@ -92,6 +106,4 @@ public class HomeController {
         ra.addFlashAttribute("active_tab",null);
         return "redirect:/login";
     }
-
-
 }
