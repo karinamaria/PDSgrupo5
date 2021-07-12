@@ -1,5 +1,6 @@
 package br.ufrn.PDSgrupo5.service;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumSituacaoProfissionalSaude;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,11 @@ public class ValidadorService {
     public ValidadorService(ProfissionalSaudeService ps){
         this.profissionalSaudeService = ps;
     }
-    public void salvarEdicaoProfissionalSaude(ProfissionalSaude ps){
-        ProfissionalSaude psAuxiliar = profissionalSaudeService.buscarProfissioalPorId(ps.getId());
+    public void salvarEdicaoProfissionalSaude(Long idProfissional, boolean autorizacao, EnumSituacaoProfissionalSaude justificativa){
+        ProfissionalSaude psAuxiliar = profissionalSaudeService.buscarProfissioalPorId(idProfissional);
 
-        psAuxiliar.setSituacaoProfissionalSaude(ps.getSituacaoProfissionalSaude());
-        psAuxiliar.setLegalizado(ps.isLegalizado());
+        psAuxiliar.setSituacaoProfissionalSaude(justificativa);
+        psAuxiliar.setLegalizado(autorizacao);
 
         profissionalSaudeService.salvar(psAuxiliar);
     }
