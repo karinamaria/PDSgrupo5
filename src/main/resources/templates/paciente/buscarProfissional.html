@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html	lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+       	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-light bg-light">
+		  	<div class="container-fluid">
+		   		<span class="navbar-brand mb-0 h1">Nome do site</span>
+		 	</div>
+		</nav>
+	</header>
+	
+	<section>
+		<div class="container" style="width: 60%; padding-bottom: 30px">
+			<nav aria-label="breadcrumb">
+			  	<ol class="breadcrumb" style="background-color: white; padding-left: 0px">
+			    	<li class="breadcrumb-item"><a href="#">Principal</a></li>
+			    	<li class="breadcrumb-item active" aria-current="page">Profissionais</li>
+			  	</ol>
+			</nav>
+			
+			<form th:action="@{/paciente/buscar}" method="post">
+				<div class="form-row">
+					<div class="input-group">
+						<input type="text" class="form-control" name="nomeProfissional" placeholder="Nome do profissional...">
+
+                        <select class="form-control" name="categoriaProfissional" id="tipoRegistroProfissionalInput">
+                            <option selected>Todos</option>
+                            <option th:each="tipoRegistro : ${T(br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro).values()}"
+                                    th:value="${tipoRegistro}" th:text="${tipoRegistro.descricao}"></option>
+                        </select>
+                        
+                        <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+                	</div>
+				</div>
+			</form>
+		
+		 	<div class="card" style="margin-top: 20px" th:each="profissional : ${listaProfissionais}">
+		    	<div class="card-body">
+			        <h5 class="card-title"><a href="#" style="color: black"><span th:text="${profissional.pessoa.nome}"></span></a></h5>
+			        <h6 class="card-subtitle mb-2 text-muted"><span th:text="${profissional.enumTipoRegistro.getDescricao()}"></span></h6>
+			        <p class="card-text"><span th:utext="${#strings.abbreviate(profissional.descricao, 200)}"></span></p>
+		      	</div>
+		    </div>
+		</div>
+	</section>
+	
+</body>
+</html>

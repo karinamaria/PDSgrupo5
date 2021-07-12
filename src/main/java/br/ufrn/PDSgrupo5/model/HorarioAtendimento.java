@@ -3,11 +3,13 @@ package br.ufrn.PDSgrupo5.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-@Table(name = "turno_atendimento")
-public class TurnoAtendimento extends EntidadeAbstrata{
+@Table(name = "horario_atendimento")
+public class HorarioAtendimento extends EntidadeAbstrata{
 
 	@Column(name="dia_semana")
 	private String diaSemana;
@@ -21,8 +23,10 @@ public class TurnoAtendimento extends EntidadeAbstrata{
 	@Column(name = "horario_fim", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date horarioFim;
+	
+	private boolean livre = true;
 
-	public TurnoAtendimento() {
+	public HorarioAtendimento() {
 	}
 
 	public String getDiaSemana() {
@@ -47,5 +51,32 @@ public class TurnoAtendimento extends EntidadeAbstrata{
 
 	public void setHorarioFim(Date horarioFim) {
 		this.horarioFim = horarioFim;
+	}
+
+	public boolean isLivre() {
+		return livre;
+	}
+
+	public void setLivre(boolean livre) {
+		this.livre = livre;
+	}
+	
+	public String statusToString() {
+		if(livre) {
+			return "Livre";
+		}
+		return "Ocupado";
+	}
+	
+	public String dataToString() {
+		return new SimpleDateFormat("dd/MM/yyyy").format(horarioInicio);
+	}
+	
+	public String horaInicioToString() {
+		return new SimpleDateFormat("HH:mm").format(horarioInicio);
+	}
+	
+	public String horaFimToString() {
+		return new SimpleDateFormat("HH:mm").format(horarioFim);
 	}
 }

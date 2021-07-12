@@ -81,7 +81,7 @@ public class HomeController {
         }catch(NegocioException ne){
             return "";//o usuário não tem permissão para editar outro candidato. Apresente página de erro
         }
-
+        ra.addFlashAttribute("active_tab",null);
         return "redirect:/login";
     }
 
@@ -103,7 +103,7 @@ public class HomeController {
         }catch(NegocioException ne){
             return "";
         }
-
+        ra.addFlashAttribute("active_tab",null);
         return "redirect:/login";
     }
 }
