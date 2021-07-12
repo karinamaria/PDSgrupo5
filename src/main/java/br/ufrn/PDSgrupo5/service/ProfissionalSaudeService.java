@@ -3,6 +3,7 @@ package br.ufrn.PDSgrupo5.service;
 import java.util.List;
 import java.util.Objects;
 
+import br.ufrn.PDSgrupo5.enumeration.EnumSituacaoProfissionalSaude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -43,6 +44,8 @@ public class ProfissionalSaudeService {
 		ps.setAtivo(true);
 		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
 		ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
+		ps.setSituacaoProfissionalSaude(EnumSituacaoProfissionalSaude.AGUARDANDO_ANALISE);
+
 		salvar(ps);
 	}
 	
@@ -89,6 +92,7 @@ public class ProfissionalSaudeService {
 
 		ps.setId(psAux.getId());
 		ps.getPessoa().setId(psAux.getPessoa().getId());
+		ps.setSituacaoProfissionalSaude(psAux.getSituacaoProfissionalSaude());
 
         if(Objects.isNull(ps.getPessoa().getEndereco())){
             ps.getPessoa().setEndereco(null);

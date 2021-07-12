@@ -28,6 +28,7 @@
                                 <th>CPF</th>
                                 <th>Profissão</th>
                                 <th>Nº Registro</th>
+                                <th>Situação </th>
                                 <th>Opção</th>
                             </tr>
                         </thead>
@@ -38,6 +39,7 @@
                             <td th:text="${profissional.pessoa.cpf}"></td>
                             <td th:text="${profissional.enumTipoRegistro.descricao}"></td>
                             <td th:text="${profissional.numeroRegistro}"></td>
+                            <td th:text="${profissional.situacaoProfissionalSaude.descricao}"></td>
 
                             <td class="actions-col">
                                 <a th:data-id="${profissional.id}" data-toggle="modal" data-target="#exampleModal" id="btnValidar" class="btn btn-action" >
