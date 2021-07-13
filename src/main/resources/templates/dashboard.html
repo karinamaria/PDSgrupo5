@@ -24,7 +24,6 @@
         $('#exampleModal').on('show.bs.modal', function(e) {
             var idProfissional = $(e.relatedTarget).data('id');
             $(e.currentTarget).find('input[name="profissionalId"]').val(idProfissional);
-            console.log(idProfissional);
         });
     </script>
 </th:block>

@@ -33,29 +33,10 @@ public class AutenticacaoSucessoHandler implements AuthenticationSuccessHandler 
     }
 
     private void verificarPapel(HttpServletRequest request, HttpServletResponse response, GrantedAuthority authority) {
-        if(authority.getAuthority().equals(EnumTipoPapel.PACIENTE.getDescricao())) {
-            try {
-                redirectStrategy.sendRedirect(request, response, "rederecionarParaPaciente");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else if(authority.getAuthority().equals(EnumTipoPapel.PROFISSIONAL_SAUDE.getDescricao())) {
-            try {
-                redirectStrategy.sendRedirect(request, response, "rederecionarParaProfissional");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else if(authority.getAuthority().equals(EnumTipoPapel.VALIDADOR.getDescricao())){
-            try {
-                redirectStrategy.sendRedirect(request, response, "rederecionarParaValidador");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            throw new IllegalStateException();
+        try {
+            redirectStrategy.sendRedirect(request, response, "dashboard");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
