@@ -27,6 +27,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/novo-paciente/salvar").permitAll()
                 .antMatchers("/novo-profissional/salvar").permitAll()
                 .antMatchers("/paciente/**").hasAuthority(EnumTipoPapel.PACIENTE.getDescricao())
+                .antMatchers("/profissional-saude/**").hasAuthority(EnumTipoPapel.PROFISSIONAL_SAUDE.getDescricao())
+                .antMatchers("/validador/**").hasAuthority(EnumTipoPapel.VALIDADOR.getDescricao())
                 .anyRequest().authenticated();
     }
     private void secureStaticResources(HttpSecurity http) throws Exception{

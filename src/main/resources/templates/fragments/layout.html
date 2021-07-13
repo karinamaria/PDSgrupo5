@@ -70,6 +70,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
+                        <a class="nav-link" th:href="@{/profissional-saude/horariosAtendimento}" th:if="${isProfissional}">
+                            <div class="sb-nav-link-icon"><i class="fa fa-calendar"></i></div>
+                            Horários atendimento
+                        </a>
                     </div>
                 </div>
 
