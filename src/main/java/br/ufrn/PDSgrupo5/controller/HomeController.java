@@ -3,6 +3,7 @@ package br.ufrn.PDSgrupo5.controller;
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
+import br.ufrn.PDSgrupo5.model.Atendimento;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.PacienteService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @Controller
 public class HomeController {
@@ -37,6 +39,10 @@ public class HomeController {
     public String dashBoard(Model model){
         if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.VALIDADOR)){
             model.addAttribute("profissionais", profissionalSaudeService.listarProfissionaisStatusLegalizacao(false));
+        }
+        else if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.PACIENTE)){
+            model.addAttribute("profissionais", profissionalSaudeService.listarProfissionaisStatusLegalizacao(true));
+            model.addAttribute("proximosAtendimentos", new ArrayList<Atendimento>());
         }
         return "dashboard";
     }

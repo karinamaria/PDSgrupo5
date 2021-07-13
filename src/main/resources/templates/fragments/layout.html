@@ -8,7 +8,7 @@
 
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-        <a href="index" class="logo d-flex align-items-center">
+        <a th:href="@{/index}" class="logo d-flex align-items-center">
             <img src="/img/logo.ico" alt="ícone do site">
             <span>Nome</span>
         </a>
@@ -35,7 +35,7 @@
 <th:block th:fragment="menuUsuarioLogado (item, subitem)">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index">Nome</a>
+        <a class="navbar-brand ps-3" th:href="@{/dashboard}">Nome</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>

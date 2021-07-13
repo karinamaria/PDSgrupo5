@@ -88,6 +88,59 @@
   </div>
 
 </th:block>
+
+
+<th:block th:fragment="pacienteDashboard">
+  <div class="ml-md-5 mr-md-5 mb-5" th:if="${not #lists.isEmpty(proximosAtendimentos)}">
+    <div class="form-row border-bottom my-5">
+      <h5 class="text-secondary mt-4 mb-4">Próximos atendimentos</h5>
+    </div>
+  </div>
+
+  <div class="ml-md-5 mr-md-5 mb-5">
+    <div class="form-row border-bottom my-5">
+      <h5 class="text-secondary mt-4 mb-4">Próximos atendimentos</h5>
+    </div>
+  </div>
+
+  <div class="ml-md-5 mr-md-5 mb-5" id="agendar">
+    <div class="form-row border-bottom my-5">
+      <h5 class="text-secondary mt-4 mb-4">Agendar atendimento</h5>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Profissionais disponiveis para agendamento
+      </div>
+      <div class="card-body">
+        <table id="datatablesSimple">
+          <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Profissão</th>
+            <th>Nº Registro</th>
+            <th>Opção</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="profissional : ${profissionais}">
+            <td th:text="${profissional.pessoa.nome}"></td>
+            <td th:text="${profissional.enumTipoRegistro.descricao}"></td>
+            <td th:text="${profissional.numeroRegistro}"></td>
+
+            <td class="actions-col">
+              <a th:data-id="${profissional.id}" data-toggle="modal" data-target="#exampleModal" id="btnAgendar" class="btn btn-action" >
+                <i class="fa fa-calendar"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</th:block>
 </body>
 
 </html>
