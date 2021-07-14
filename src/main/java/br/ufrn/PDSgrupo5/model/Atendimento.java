@@ -18,8 +18,8 @@ public class Atendimento extends EntidadeAbstrata {
 	private String titulo;
 
 	private String descricao;
-
-	private String status;
+//
+//	private String status;
 
 	@OneToOne
 	private Paciente paciente;
@@ -66,13 +66,13 @@ public class Atendimento extends EntidadeAbstrata {
 		this.descricao = descricao;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+//	public String getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(String status) {
+//		this.status = status;
+//	}
 
 	public Paciente getPaciente() {
 		return paciente;

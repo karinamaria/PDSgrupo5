@@ -61,11 +61,4 @@ public class HorarioAtendimentoService {
 		
 		return temChoque;
 	}
-
-	public void excluirHorario(Long idHorario){
-		HorarioAtendimento hr = horarioAtendimentoRepository.findById(idHorario).get();
-		if(Objects.nonNull(hr)){
-			horarioAtendimentoRepository.delete(hr);
-		}
-	}
 }

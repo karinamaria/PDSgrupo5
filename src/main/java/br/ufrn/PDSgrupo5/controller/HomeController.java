@@ -6,6 +6,7 @@ import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Atendimento;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.service.AtendimentoService;
 import br.ufrn.PDSgrupo5.service.PacienteService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -25,13 +27,16 @@ public class HomeController {
 
     private ProfissionalSaudeService profissionalSaudeService;
 
+    private AtendimentoService atendimentoService;
+
     private UsuarioHelper usuarioHelper;
 
     @Autowired
     public HomeController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService,
-                          UsuarioHelper usuarioHelper){
+                         AtendimentoService atendimento, UsuarioHelper usuarioHelper){
         this.pacienteService = pacienteService;
         this.profissionalSaudeService = profissionalSaudeService;
+        this.atendimentoService = atendimento;
         this.usuarioHelper = usuarioHelper;
     }
 
@@ -42,7 +47,10 @@ public class HomeController {
         }
         else if(usuarioHelper.getUsuarioLogado().getEnumTipoPapel().equals(EnumTipoPapel.PACIENTE)){
             model.addAttribute("profissionais", profissionalSaudeService.listarProfissionaisStatusLegalizacao(true));
-            model.addAttribute("proximosAtendimentos", new ArrayList<Atendimento>());
+            model.addAttribute("proximosAtendimentos", atendimentoService.buscarProximosAtendimentosPaciente());
+        }
+        else{
+            model.addAttribute("proximosAtendimentos", atendimentoService.buscarProximosAtendimentosProfissional());
         }
         return "dashboard";
     }

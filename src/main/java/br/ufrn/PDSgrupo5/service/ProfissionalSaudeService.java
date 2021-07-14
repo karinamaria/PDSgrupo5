@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.criteria.Predicate;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumSituacaoProfissionalSaude;
+import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -31,17 +32,17 @@ public class ProfissionalSaudeService {
 	
 	private UsuarioHelper usuarioHelper;
 
-	private HorarioAtendimentoService horarioAtendimentoService;
+	private HorarioAtendimentoRepository horarioAtendimentoRepository;
 	
 	@Autowired
 	public ProfissionalSaudeService(ProfissionalSaudeRepository profissionalSaudeRepository,
 									PessoaService pessoaService, UsuarioService usuarioService,
-									UsuarioHelper usuarioHelper, HorarioAtendimentoService horario) {
+									UsuarioHelper usuarioHelper, HorarioAtendimentoRepository hr) {
 		this.profissionalSaudeRepository = profissionalSaudeRepository;
 		this.pessoaService = pessoaService;
 		this.usuarioService = usuarioService;
 		this.usuarioHelper = usuarioHelper;
-		this.horarioAtendimentoService = horario;
+		this.horarioAtendimentoRepository = hr;
 	}
 	
 	public ProfissionalSaude salvar(ProfissionalSaude ps) {
@@ -170,7 +171,7 @@ public class ProfissionalSaudeService {
 		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
 
 		ps.getHorarioAtendimento().removeIf(x -> x.getId().equals(idHorarioAtendimento));
-		horarioAtendimentoService.excluirHorario(idHorarioAtendimento);
+		horarioAtendimentoRepository.delete(horarioAtendimentoRepository.findById(idHorarioAtendimento).get());
 
 		return salvar(ps);
 	}
