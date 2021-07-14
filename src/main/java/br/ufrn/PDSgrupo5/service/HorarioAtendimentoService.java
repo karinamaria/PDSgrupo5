@@ -2,7 +2,9 @@ package br.ufrn.PDSgrupo5.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
+import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
 public class HorarioAtendimentoService {
 	private ProfissionalSaudeService profissionalSaudeService;
 	private DataHoraService dataHoraService;
+	private HorarioAtendimentoRepository horarioAtendimentoRepository;
 	
 	@Autowired
 	public HorarioAtendimentoService(ProfissionalSaudeService profissionalSaudeService, DataHoraService dataHoraService) {
@@ -57,5 +60,12 @@ public class HorarioAtendimentoService {
 		}
 		
 		return temChoque;
+	}
+
+	public void excluirHorario(Long idHorario){
+		HorarioAtendimento hr = horarioAtendimentoRepository.findById(idHorario).get();
+		if(Objects.nonNull(hr)){
+			horarioAtendimentoRepository.delete(hr);
+		}
 	}
 }

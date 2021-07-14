@@ -30,15 +30,18 @@ public class ProfissionalSaudeService {
 	private UsuarioService usuarioService;
 	
 	private UsuarioHelper usuarioHelper;
+
+	private HorarioAtendimentoService horarioAtendimentoService;
 	
 	@Autowired
 	public ProfissionalSaudeService(ProfissionalSaudeRepository profissionalSaudeRepository,
 									PessoaService pessoaService, UsuarioService usuarioService,
-									UsuarioHelper usuarioHelper) {
+									UsuarioHelper usuarioHelper, HorarioAtendimentoService horario) {
 		this.profissionalSaudeRepository = profissionalSaudeRepository;
 		this.pessoaService = pessoaService;
 		this.usuarioService = usuarioService;
 		this.usuarioHelper = usuarioHelper;
+		this.horarioAtendimentoService = horario;
 	}
 	
 	public ProfissionalSaude salvar(ProfissionalSaude ps) {
@@ -161,6 +164,15 @@ public class ProfissionalSaudeService {
 	public List<HorarioAtendimento> buscarHorariosAtendimento() {
 		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
 		return ps.getHorarioAtendimento();
+	}
+
+	public ProfissionalSaude excluirHorarioAtendimento(Long idHorarioAtendimento){
+		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
+
+		ps.getHorarioAtendimento().removeIf(x -> x.getId().equals(idHorarioAtendimento));
+		horarioAtendimentoService.excluirHorario(idHorarioAtendimento);
+
+		return salvar(ps);
 	}
 
 	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{

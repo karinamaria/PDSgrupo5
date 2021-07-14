@@ -125,4 +125,11 @@ public class ProfissionalSaudeController {
     	
     	return "redirect:/profissional-saude/horariosAtendimento";
     }
+
+    @GetMapping("/excluirHorarioAtendimento")
+    public String excluirHorarioAtendimento(@RequestParam("idHorarioAtendimento") Long idHorarioAtendimento){
+        profissionalSaudeService.excluirHorarioAtendimento(idHorarioAtendimento);
+
+        return "redirect:/profissional-saude/horariosAtendimento";
+    }
 }
