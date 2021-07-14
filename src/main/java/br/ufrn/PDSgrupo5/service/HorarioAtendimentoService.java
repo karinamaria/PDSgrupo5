@@ -1,9 +1,11 @@
 package br.ufrn.PDSgrupo5.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,19 +29,21 @@ public class HorarioAtendimentoService {
 		return profissionalSaudeService.adicionarHorarioAtendimento(ha);
 	}
 	
-	public String validarHorario(HorarioAtendimento ha) {
+	public void validarHorario(HorarioAtendimento ha) throws NegocioException{
 		if(ha.getHorarioInicio().compareTo(ha.getHorarioFim()) >= 0) {
-			return "Horário inválido. A hora de início deve ser anterior a de fim e elas não podem ser iguais.";
+			throw new NegocioException("Horário inválido. A hora de início deve ser anterior a de fim e elas não podem ser iguais.");
 		}
-		
+
+		if(ha.getHorarioInicio().before(new Date())){
+			throw new NegocioException("A data início do atendimento deve ser posterior a data atual");
+		}
+
 		List<HorarioAtendimento> horarios = profissionalSaudeService.buscarHorariosAtendimento();
 		for(HorarioAtendimento horario : horarios ) {
 			if( horariosTemChoque(ha, horario) ) {
-				return "Choque entre horários. Verifique seus horários já cadastrados.";
+				throw new NegocioException("Choque entre horários. Verifique seus horários já cadastrados.");
 			}
 		}
-		
-		return null;
 	}
 	
 	public HorarioAtendimento converterParaHorarioAtendimento(Date horarioInicio, Date horarioFim) {	

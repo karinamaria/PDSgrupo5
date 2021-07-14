@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 
+import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,17 +112,16 @@ public class ProfissionalSaudeController {
 			Date horarioFim = dataHoraService.converterParaDate(data, horaFim);
 			HorarioAtendimento ha = horarioAtendimentoService.converterParaHorarioAtendimento(horarioInicio, horarioFim);
 			
-			String erro = horarioAtendimentoService.validarHorario(ha);
-			if(Objects.nonNull(erro)) {
-				model.addAttribute("mensagemErro", erro);
-				return horariosAtendimento(model);
-			}
-			
+			horarioAtendimentoService.validarHorario(ha);
+
 			profissionalSaudeService.adicionarHorarioAtendimento(ha);
 			
 		} catch (ParseException e) {
 			return "redirect:/profissional-saude/error";
-		}
+		} catch (NegocioException ne){
+            model.addAttribute("mensagemErro", ne.getMessage());
+            return horariosAtendimento(model);
+        }
     	
     	return "redirect:/profissional-saude/horariosAtendimento";
     }
