@@ -96,6 +96,19 @@
     <div class="form-row border-bottom my-5">
       <h5 class="text-secondary mt-4 mb-4">Próximos atendimentos</h5>
     </div>
+    <div class="container-fluid" th:unless="${#lists.isEmpty(proximosAtendimentos)}"  th:each="atendimento : ${proximosAtendimentos}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <span th:text="'Profissional: '+${#strings.abbreviate(atendimento.profissionalSaude.pessoa.nome, 50)}+ ' - ' +${#strings.abbreviate(atendimento.profissionalSaude.enumTipoRegistro.descricao, 50)}"></span>
+          </h6>
+          <span class="card-text">
+            <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="ml-md-5 mr-md-5 mb-5" id="agendar">
