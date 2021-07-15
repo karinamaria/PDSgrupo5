@@ -104,7 +104,7 @@ public class HomeController {
             br = profissionalSaudeService.validarDados(profissionalSaude, br);
 
             if(br.hasErrors()) {
-                ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", br);
+                ra.addFlashAttribute("org.springframework.validation.BindingResult.profissionalSaude", br);
                 ra.addFlashAttribute("message", "Erro ao salvar profissional da saúde");
                 ra.addFlashAttribute("profissionalSaude",profissionalSaude);
                 ra.addFlashAttribute("active_tab","profissional");
