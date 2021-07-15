@@ -171,7 +171,7 @@
           </h6>
           <span class="card-text">
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
-            <a href="#" class="btn btn-primary">Alterar estado do atendimento</a>
+            <a th:data-id="${atendimento.id}" data-toggle="modal" data-target="#modalStatusAtendimento" class="btn btn-primary">Alterar estado do atendimento</a>
           </span>
         </div>
       </div>
@@ -193,6 +193,39 @@
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
           </span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal profissional -->
+  <div class="modal fade" id="modalStatusAtendimento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">ACEITAR/RECUSAR ATENDIMENTO</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="container-fluid ml-md-5 mr-md-5 mb-5" method="POST"  th:action="@{/profissional-saude/aceitarRecusarAtendimento}">
+            <div class="form-row">
+              <input type="hidden" name="atendimentoId" value=""/>
+              <div class="form-group col-md-8">
+                <label class="text-secondary text-center" for="autorizacaoAtendimentoInput">Autorização</label>
+                <select class="form-control mx-auto" name="autorizacaoAtendimento" id="autorizacaoAtendimentoInput" required>
+                  <option value="" selected>Escolha</option>
+                  <option value=true>Atendimento autorizado</option>
+                  <option value=false>Atendimento não autorizado</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>

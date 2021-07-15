@@ -28,6 +28,10 @@ public class HorarioAtendimentoService {
 	public ProfissionalSaude salvar(HorarioAtendimento ha) {
 		return profissionalSaudeService.adicionarHorarioAtendimento(ha);
 	}
+
+	public HorarioAtendimento salvarHorario(HorarioAtendimento ha){
+		return horarioAtendimentoRepository.save(ha);
+	}
 	
 	public void validarHorario(HorarioAtendimento ha) throws NegocioException{
 		if(ha.getHorarioInicio().compareTo(ha.getHorarioFim()) >= 0) {

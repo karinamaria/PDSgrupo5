@@ -37,6 +37,12 @@
             var idProfissional = $(e.relatedTarget).data('id');
             $(e.currentTarget).find('input[name="profissionalId"]').val(idProfissional);
         });
+
+        //Modal do aceitar/recusar atendimento
+        $('#modalStatusAtendimento').on('show.bs.modal', function(e) {
+            var idAtendimento = $(e.relatedTarget).data('id');
+            $(e.currentTarget).find('input[name="atendimentoId"]').val(idAtendimento);
+        });
     </script>
 </th:block>
 </body>

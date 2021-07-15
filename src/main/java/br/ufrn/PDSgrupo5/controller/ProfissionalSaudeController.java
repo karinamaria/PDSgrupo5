@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.service.AtendimentoService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,13 +27,15 @@ public class ProfissionalSaudeController {
 	private ProfissionalSaudeService profissionalSaudeService;
 	private HorarioAtendimentoService horarioAtendimentoService;
 	private DataHoraService dataHoraService;
+	private AtendimentoService atendimentoService;
 	
 	@Autowired
 	ProfissionalSaudeController(ProfissionalSaudeService profissionalSaudeService, HorarioAtendimentoService horarioAtendimentoService,
-								DataHoraService dataHoraService){
+								DataHoraService dataHoraService, AtendimentoService atendimentoService){
 		this.profissionalSaudeService = profissionalSaudeService;
 		this.horarioAtendimentoService = horarioAtendimentoService;
 		this.dataHoraService = dataHoraService;
+		this.atendimentoService = atendimentoService;
 	}
 	
 	@GetMapping("/form")
@@ -131,5 +134,12 @@ public class ProfissionalSaudeController {
         profissionalSaudeService.excluirHorarioAtendimento(idHorarioAtendimento);
 
         return "redirect:/profissional-saude/horariosAtendimento";
+    }
+
+    @PostMapping("/aceitarRecusarAtendimento")
+    public String aceitarRecusarAtendimento(@RequestParam("atendimentoId") Long id,
+                                            @RequestParam("autorizacaoAtendimento") boolean autorizacao){
+        atendimentoService.aceitarRecusarAtendimento(id, autorizacao);
+        return "redirect:/dashboard";
     }
 }
