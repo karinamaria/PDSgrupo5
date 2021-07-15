@@ -100,7 +100,7 @@
       <p class="text-center text-secondary">Nenhum atendimento encontrado</p>
     </div>
     <div class="container-fluid" th:unless="${#lists.isEmpty(proximosAtendimentos)}"  th:each="atendimento : ${proximosAtendimentos}">
-      <div class="card">
+      <div class="card mt-2">
         <div class="card-body">
           <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
           <h6 class="card-subtitle mb-2 text-muted">
@@ -164,7 +164,7 @@
       <p class="text-center text-secondary">Nenhum atendimento aguardando confirmação</p>
     </div>
     <div class="container-fluid" th:unless="${#lists.isEmpty(atendimentosStatusPendente)}" th:each="atendimento : ${atendimentosStatusPendente}">
-      <div class="card">
+      <div class="card mt-2">
         <div class="card-body">
           <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
           <h6 class="card-subtitle mb-2 text-muted">
@@ -184,7 +184,7 @@
       <p class="text-center text-secondary">Nenhum próximo atendimento</p>
     </div>
     <div class="container-fluid" th:unless="${#lists.isEmpty(proximosAtendimentos)}" th:each="atendimento : ${proximosAtendimentos}">
-      <div class="card">
+      <div class="card mt-2">
         <div class="card-body">
           <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
           <h6 class="card-subtitle mb-2 text-muted">

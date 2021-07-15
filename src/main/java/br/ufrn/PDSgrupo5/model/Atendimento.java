@@ -20,7 +20,7 @@ public class Atendimento extends EntidadeAbstrata {
 	private String descricao;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean status;
+	private Boolean status = false;
 
 	@OneToOne
 	private Paciente paciente;
