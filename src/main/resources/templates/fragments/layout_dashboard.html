@@ -125,8 +125,8 @@
             <td th:text="${profissional.numeroRegistro}"></td>
 
             <td class="actions-col">
-              <a th:data-id="${profissional.id}" data-toggle="modal" data-target="#exampleModal" id="btnAgendar" class="btn btn-action" >
-                <i class="fa fa-calendar"></i>
+              <a th:href="${(#mvc.url('PC#visualizarProfissional').arg(0, profissional.id)).build()}" id="btnVisualizarProfissional" class="btn btn-action">
+                <i class="fa fa-eye"></i>
               </a>
             </td>
           </tr>
@@ -135,6 +135,7 @@
       </div>
     </div>
   </div>
+  
 </th:block>
 </body>
 

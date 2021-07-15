@@ -14,7 +14,7 @@ public class ValidadorService {
         this.profissionalSaudeService = ps;
     }
     public void salvarEdicaoProfissionalSaude(Long idProfissional, boolean autorizacao, EnumSituacaoProfissionalSaude justificativa){
-        ProfissionalSaude psAuxiliar = profissionalSaudeService.buscarProfissioalPorId(idProfissional);
+        ProfissionalSaude psAuxiliar = profissionalSaudeService.buscarProfissionalPorId(idProfissional);
 
         psAuxiliar.setSituacaoProfissionalSaude(justificativa);
         psAuxiliar.setLegalizado(autorizacao);

@@ -137,7 +137,7 @@ public class ProfissionalSaudeService {
 		return profissionalSaudeRepository.findAllByLegalizado(legalizado);
 	}
     
-	public ProfissionalSaude buscarProfissioalPorId(Long id){
+	public ProfissionalSaude buscarProfissionalPorId(Long id){
 		return profissionalSaudeRepository.findById(id).orElse(null);
 	}
 	
@@ -165,6 +165,19 @@ public class ProfissionalSaudeService {
 	public List<HorarioAtendimento> buscarHorariosAtendimento() {
 		ProfissionalSaude ps = buscarProfissionalPorUsuarioLogado();
 		return ps.getHorarioAtendimento();
+	}
+	
+	public List<HorarioAtendimento> buscarHorariosAtendimentoLivres(Long id){
+		ProfissionalSaude ps = buscarProfissionalPorId(id);
+		List<HorarioAtendimento> todosHorarios = ps.getHorarioAtendimento();
+		
+		List<HorarioAtendimento> horariosLivres = new ArrayList<HorarioAtendimento>();
+		for (HorarioAtendimento horario : todosHorarios) {
+			if(horario.isLivre()) {
+				horariosLivres.add(horario);
+			}
+		}
+		return horariosLivres;
 	}
 
 	public ProfissionalSaude excluirHorarioAtendimento(Long idHorarioAtendimento){

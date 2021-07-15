@@ -1,9 +1,11 @@
 package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
-
+import br.ufrn.PDSgrupo5.model.Atendimento;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
+import br.ufrn.PDSgrupo5.service.AtendimentoService;
+import br.ufrn.PDSgrupo5.service.HorarioAtendimentoService;
 import br.ufrn.PDSgrupo5.service.PacienteService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,11 +30,16 @@ import javax.validation.Valid;
 public class PacienteController {
     private PacienteService pacienteService;
     private ProfissionalSaudeService profissionalSaudeService;
+    private AtendimentoService atendimentoService;
+    private HorarioAtendimentoService horarioAtendimentoService;
 
     @Autowired
-    public PacienteController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService){
+    public PacienteController(PacienteService pacienteService, ProfissionalSaudeService profissionalSaudeService,
+    						  AtendimentoService atendimentoService, HorarioAtendimentoService horarioAtendimentoService){
         this.pacienteService = pacienteService;
         this.profissionalSaudeService = profissionalSaudeService;
+        this.atendimentoService = atendimentoService;
+        this.horarioAtendimentoService = horarioAtendimentoService;
     }
 
     @GetMapping
@@ -110,5 +118,28 @@ public class PacienteController {
     	
     	mv.addObject("listaProfissionais", profissionais);
     	return mv;
+    }
+    
+    @GetMapping("/visualizarProfissional/{id}")
+    public String visualizarProfissional(@PathVariable("id") Long id, Model model) {
+    	model.addAttribute("profissional", profissionalSaudeService.buscarProfissionalPorId(id));
+    	model.addAttribute("horariosAtendimento", profissionalSaudeService.buscarHorariosAtendimentoLivres(id));
+    	model.addAttribute("atendimento", new Atendimento());
+    	
+    	return "paciente/formAtendimento";
+    }
+    
+    @PostMapping("/agendarAtendimento")
+    public String agendarAtendimento(@RequestParam("horarioAtendimentoId") Long idHorario, @RequestParam("profissionalId") Long idProfissional,
+    							     @Valid Atendimento atendimento) {
+    	atendimento.setPaciente(pacienteService.buscarPacientePorUsuarioLogado());
+    	atendimento.setProfissionalSaude(profissionalSaudeService.buscarProfissionalPorId(idProfissional));
+    	
+    	horarioAtendimentoService.buscarHorarioPorId(idHorario).setLivre(false);
+    	atendimento.setHorarioatendimento(horarioAtendimentoService.buscarHorarioPorId(idHorario));
+    	
+    	atendimentoService.salvar(atendimento);
+    	
+    	return "redirect:/dashboard";
     }
 }

@@ -1,9 +1,7 @@
 package br.ufrn.PDSgrupo5.service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
@@ -20,9 +18,11 @@ public class HorarioAtendimentoService {
 	private HorarioAtendimentoRepository horarioAtendimentoRepository;
 	
 	@Autowired
-	public HorarioAtendimentoService(ProfissionalSaudeService profissionalSaudeService, DataHoraService dataHoraService) {
+	public HorarioAtendimentoService(ProfissionalSaudeService profissionalSaudeService, DataHoraService dataHoraService,
+									 HorarioAtendimentoRepository horarioAtendimentoRepository) {
 		this.profissionalSaudeService = profissionalSaudeService;
 		this.dataHoraService = dataHoraService;
+		this.horarioAtendimentoRepository = horarioAtendimentoRepository;
 	}
 	
 	public ProfissionalSaude salvar(HorarioAtendimento ha) {
@@ -64,5 +64,9 @@ public class HorarioAtendimentoService {
 		}
 		
 		return temChoque;
+	}
+
+	public HorarioAtendimento buscarHorarioPorId(Long id) {
+		return horarioAtendimentoRepository.findById(id).get();
 	}
 }

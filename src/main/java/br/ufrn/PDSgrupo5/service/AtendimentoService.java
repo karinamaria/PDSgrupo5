@@ -23,6 +23,10 @@ public class AtendimentoService {
         this.profissionalSaudeService = psService;
         this.atendimentoRepository = atendimentoRepository;
     }
+    
+    public Atendimento salvar(Atendimento a) {
+    	return atendimentoRepository.save(a);
+    }
 
     public List<Atendimento> buscarProximosAtendimentosPaciente(){
         Long idPacienteLogado = pacienteService.buscarPacientePorUsuarioLogado().getId();

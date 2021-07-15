@@ -39,7 +39,7 @@ public class ValidadorController {
 
     @GetMapping("/visualizarProfissional/{id}")
     public String visualizarProfissional(@PathVariable Long id, Model model){
-        model.addAttribute("profissional",profissionalSaudeService.buscarProfissioalPorId(id));
+        model.addAttribute("profissional",profissionalSaudeService.buscarProfissionalPorId(id));
 
         return "";
     }
