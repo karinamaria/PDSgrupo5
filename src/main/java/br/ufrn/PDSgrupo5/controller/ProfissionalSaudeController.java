@@ -2,7 +2,6 @@ package br.ufrn.PDSgrupo5.controller;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Objects;
 
 import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -47,8 +46,8 @@ public class ProfissionalSaudeController {
 		return "profissional-saude/form";
 	}
 	
-    @PostMapping("/cadastrar")
-    public String cadastrar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
 
         profissionalSaude = profissionalSaudeService.verificarEdicao(profissionalSaude);
         br = profissionalSaudeService.validarDados(profissionalSaude, br);
@@ -59,7 +58,7 @@ public class ProfissionalSaudeController {
             return form(model);
         }
 
-        profissionalSaudeService.salvar(profissionalSaude);
+        profissionalSaudeService.salvarProfissional(profissionalSaude);
 
 
         return "redirect:/dashboard";

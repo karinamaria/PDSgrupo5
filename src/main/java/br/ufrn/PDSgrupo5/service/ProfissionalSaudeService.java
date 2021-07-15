@@ -49,11 +49,17 @@ public class ProfissionalSaudeService {
 		return profissionalSaudeRepository.save(ps);
 	}
 	
-	public void cadastrar(ProfissionalSaude ps) {
-		ps.setAtivo(true);
-		ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
-		ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
-		ps.setSituacaoProfissionalSaude(EnumSituacaoProfissionalSaude.AGUARDANDO_ANALISE);
+	public void salvarProfissional(ProfissionalSaude ps) {
+		if(ps.getId() == null) {
+			ps.setAtivo(true);
+			ps.getPessoa().setUsuario(usuarioService.prepararUsuarioParaCriacao(ps.getPessoa().getUsuario()));
+			ps.getPessoa().getUsuario().setEnumTipoPapel(EnumTipoPapel.PROFISSIONAL_SAUDE);
+			ps.setSituacaoProfissionalSaude(EnumSituacaoProfissionalSaude.AGUARDANDO_ANALISE);
+		} else {
+			ProfissionalSaude psAux = buscarProfissionalPorUsuarioLogado();
+			ps.setLegalizado(psAux.isLegalizado());
+			ps.setHorarioAtendimento(psAux.getHorarioAtendimento());
+		}
 
 		salvar(ps);
 	}
