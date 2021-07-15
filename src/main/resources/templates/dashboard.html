@@ -23,6 +23,11 @@
     </div>
     <!-- fim paciente -->
 
+    <!-- inicio profissional -->
+    <div class="container-fluid" th:if="${isProfissional}">
+        <div th:replace="fragments/layout_dashboard :: profissionalDashboard"></div>
+    </div>
+    <!-- fim profissional -->
 
 </th:block>
 <th:block layout:fragment="js">

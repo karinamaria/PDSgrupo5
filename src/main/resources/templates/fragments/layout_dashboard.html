@@ -96,6 +96,9 @@
     <div class="form-row border-bottom my-5">
       <h5 class="text-secondary mt-4 mb-4">Próximos atendimentos</h5>
     </div>
+    <div class="container-fluid" th:if="${#lists.isEmpty(proximosAtendimentos)}">
+      <p class="text-center text-secondary">Nenhum atendimento encontrado</p>
+    </div>
     <div class="container-fluid" th:unless="${#lists.isEmpty(proximosAtendimentos)}"  th:each="atendimento : ${proximosAtendimentos}">
       <div class="card">
         <div class="card-body">
@@ -105,6 +108,7 @@
           </h6>
           <span class="card-text">
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+            <p th:if="!${atendimento.status}">Aguardando confirmação do profissional</p>
           </span>
         </div>
       </div>
@@ -138,7 +142,7 @@
             <td th:text="${profissional.numeroRegistro}"></td>
 
             <td class="actions-col">
-              <a th:data-id="${profissional.id}" data-toggle="modal" data-target="#exampleModal" id="btnAgendar" class="btn btn-action" >
+              <a th:data-id="${profissional.id}" data-toggle="tooltip" data-placement="top" title="Agendar atendimento" id="btnAgendar" class="btn btn-action" >
                 <i class="fa fa-calendar"></i>
               </a>
             </td>
@@ -148,6 +152,51 @@
       </div>
     </div>
   </div>
+</th:block>
+
+<th:block th:fragment="profissionalDashboard">
+  <div class="ml-md-5 mr-md-5 mb-5">
+    <div class="form-row border-bottom my-5">
+      <h5 class="text-secondary mt-4 mb-4">Atendimentos aguardando confirmação</h5>
+    </div>
+    <div class="container-fluid" th:if="${#lists.isEmpty(atendimentosStatusPendente)}">
+      <p class="text-center text-secondary">Nenhum atendimento aguardando confirmação</p>
+    </div>
+    <div class="container-fluid" th:unless="${#lists.isEmpty(atendimentosStatusPendente)}" th:each="atendimento : ${atendimentosStatusPendente}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <span th:text="'Paciente: '+${#strings.abbreviate(atendimento.paciente.pessoa.nome, 50)}+ ' - ' +${#strings.abbreviate(atendimento.paciente.pessoa.email, 50)}"></span>
+          </h6>
+          <span class="card-text">
+            <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+            <a href="#" class="btn btn-primary">Alterar estado do atendimento</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row border-bottom my-5">
+      <h5 class="text-secondary mt-4 mb-4">Próximos atendimentos</h5>
+    </div>
+    <div class="container-fluid" th:if="${#lists.isEmpty(proximosAtendimentos)}">
+      <p class="text-center text-secondary">Nenhum próximo atendimento</p>
+    </div>
+    <div class="container-fluid" th:unless="${#lists.isEmpty(proximosAtendimentos)}" th:each="atendimento : ${proximosAtendimentos}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><span th:text="'Atendimento '+${atendimento.enumTipoAtendimento.descricao}"></span></h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <span th:text="'Paciente: '+${#strings.abbreviate(atendimento.paciente.pessoa.nome, 50)}+ ' - ' +${#strings.abbreviate(atendimento.paciente.pessoa.email, 50)}"></span>
+          </h6>
+          <span class="card-text">
+            <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </th:block>
 </body>
 

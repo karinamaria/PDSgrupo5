@@ -1,6 +1,7 @@
 package br.ufrn.PDSgrupo5.service;
 
 import br.ufrn.PDSgrupo5.model.Atendimento;
+import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.repository.AtendimentoRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,13 @@ public class AtendimentoService {
     public List<Atendimento> buscarProximosAtendimentosProfissional(){
         Long idProfissionalLogado = profissionalSaudeService.buscarProfissionalPorUsuarioLogado().getId();
 
-        return atendimentoRepository.buscarProximosAtendimentosPaciente(idProfissionalLogado, somarQuinzeDiasADataAtual());
+        return atendimentoRepository.buscarProximosAtendimentosProfissional(idProfissionalLogado, somarQuinzeDiasADataAtual());
+    }
+
+    public List<Atendimento> buscarAtendimentosAguardandoConfirmacao(){
+        ProfissionalSaude profissionalSaude = profissionalSaudeService.buscarProfissionalPorUsuarioLogado();
+
+        return atendimentoRepository.buscarAtendimentosAguardandoConfirmacao(profissionalSaude);
     }
 
     public Date somarQuinzeDiasADataAtual(){

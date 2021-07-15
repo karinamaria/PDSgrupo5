@@ -18,8 +18,9 @@ public class Atendimento extends EntidadeAbstrata {
 	private String titulo;
 
 	private String descricao;
-//
-//	private String status;
+
+	@Column(columnDefinition = "boolean default false")
+	private Boolean status;
 
 	@OneToOne
 	private Paciente paciente;
@@ -66,13 +67,13 @@ public class Atendimento extends EntidadeAbstrata {
 		this.descricao = descricao;
 	}
 
-//	public String getStatus() {
-//		return status;
-//	}
-//
-//	public void setStatus(String status) {
-//		this.status = status;
-//	}
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	public Paciente getPaciente() {
 		return paciente;
