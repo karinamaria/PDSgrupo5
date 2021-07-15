@@ -2,7 +2,7 @@ package br.ufrn.PDSgrupo5.enumeration;
 
 public enum EnumTipoAtendimento {
 
-	DOMICILIO("Em domicilío"), CONSULTORIO ("Consultório"), TELEFONE("Telefone");
+	DOMICILIO("em domicilio"), CONSULTORIO ("consultório"), TELEFONE("telefone");
 
 	private String descricao;
 
