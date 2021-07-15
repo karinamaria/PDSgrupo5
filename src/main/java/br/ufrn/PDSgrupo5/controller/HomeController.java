@@ -111,7 +111,7 @@ public class HomeController {
                 return "redirect:/login";
             }
 
-            profissionalSaudeService.cadastrar(profissionalSaude);
+            profissionalSaudeService.salvarProfissional(profissionalSaude);
         }catch(NegocioException ne){
             return "";
         }
