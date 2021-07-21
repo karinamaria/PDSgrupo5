@@ -1,11 +1,12 @@
 package br.ufrn.PDSgrupo5.controller;
 
-import java.text.ParseException;
-import java.util.Date;
-
 import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
+import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.service.AtendimentoService;
+import br.ufrn.PDSgrupo5.service.DataHoraService;
+import br.ufrn.PDSgrupo5.service.HorarioAtendimentoService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
-import br.ufrn.PDSgrupo5.service.DataHoraService;
-import br.ufrn.PDSgrupo5.service.HorarioAtendimentoService;
-
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.util.Date;
 
 @Controller
 @RequestMapping("profissional-saude")
@@ -48,19 +47,16 @@ public class ProfissionalSaudeController {
 	
     @PostMapping("/salvar")
     public String salvar(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra, Model model) {
+        try{
+            profissionalSaude = profissionalSaudeService.verificarEdicao(profissionalSaude);
+            profissionalSaudeService.validarDados(profissionalSaude, br);
 
-        profissionalSaude = profissionalSaudeService.verificarEdicao(profissionalSaude);
-        br = profissionalSaudeService.validarDados(profissionalSaude, br);
-
-        if (br.hasErrors()) {
+            profissionalSaudeService.salvarProfissional(profissionalSaude);
+        }catch (ValidacaoException validacaoException){
             model.addAttribute("message", "Erro ao cadastrar profissional da saúde");
             model.addAttribute(profissionalSaude);
             return form(model);
         }
-
-        profissionalSaudeService.salvarProfissional(profissionalSaude);
-
-
         return "redirect:/dashboard";
     }
 

@@ -2,6 +2,7 @@ package br.ufrn.PDSgrupo5.service;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.Pessoa;
@@ -50,7 +51,7 @@ public class PacienteService {
      * @param br onde os erros relativos a entidade `Paciente`são acumulados
      * @return um BindingResult que contém os erros, caso existam
      */
-    public BindingResult validarPaciente(Paciente paciente, BindingResult br){
+    public void validarPaciente(Paciente paciente, BindingResult br) throws ValidacaoException{
         if(!pessoaService.ehCpfValido(paciente.getPessoa().getCpf())){
             br.rejectValue("pessoa.cpf", "", "CPF inválido");
         }
@@ -75,7 +76,10 @@ public class PacienteService {
                 br.rejectValue("pessoa.email", "","Email já pertence a outra pessoa");
             }
         }
-        return br;
+
+        if(br.hasErrors()){
+            throw new ValidacaoException(br);
+        }
     }
 
     public Paciente buscarPacientePorUsuarioLogado(){

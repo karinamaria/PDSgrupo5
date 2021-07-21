@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.criteria.Predicate;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumSituacaoProfissionalSaude;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class ProfissionalSaudeService {
 		salvar(ps);
 	}
 	
-	public BindingResult validarDados(ProfissionalSaude ps, BindingResult br) {
+	public void validarDados(ProfissionalSaude ps, BindingResult br) throws ValidacaoException{
 		if(!pessoaService.ehCpfValido(ps.getPessoa().getCpf())) {
 			br.rejectValue("pessoa.cpf", "", "CPF inválido");
 		}
@@ -96,8 +97,9 @@ public class ProfissionalSaudeService {
 				br.rejectValue("numeroRegistro", "", "Registro profissional já pertence a outro usuário");
 			}
 		}
-		
-		return br;
+		if(br.hasErrors()){
+			throw new ValidacaoException(br);
+		}
 	}
 	
 	public ProfissionalSaude verificarEdicao(ProfissionalSaude ps) {

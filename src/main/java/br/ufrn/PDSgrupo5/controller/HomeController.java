@@ -2,6 +2,7 @@ package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -79,21 +80,18 @@ public class HomeController {
     public String novoPaciente(@Valid Paciente paciente, BindingResult br, RedirectAttributes ra){
         try{
             pacienteService.verificarPermissao(paciente);
-            br = pacienteService.validarPaciente(paciente, br);
-
-            if(br.hasErrors()){
-                ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", br);
-                ra.addFlashAttribute("message", "Erro ao salvar paciente");
-                ra.addFlashAttribute("paciente",paciente);
-                ra.addFlashAttribute("active_tab","paciente");
-                return "redirect:/login";
-            }
+            pacienteService.validarPaciente(paciente, br);
             pacienteService.salvarPaciente(paciente);
-
+            ra.addFlashAttribute("active_tab",null); //ir para página de login
         }catch(NegocioException ne){
             return "";//o usuário não tem permissão para editar outro candidato. Apresente página de erro
+        }catch(ValidacaoException validacaoException){
+            ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", validacaoException.getBindingResult());
+            ra.addFlashAttribute("message", "Erro ao salvar paciente");
+            ra.addFlashAttribute("paciente",paciente);
+            ra.addFlashAttribute("active_tab","paciente");
         }
-        ra.addFlashAttribute("active_tab",null);
+
         return "redirect:/login";
     }
 
@@ -101,21 +99,19 @@ public class HomeController {
     public String novoProfissionalSaude(@Valid ProfissionalSaude profissionalSaude, BindingResult br, RedirectAttributes ra){
         try{
             profissionalSaudeService.verificarPermissao(profissionalSaude);
-            br = profissionalSaudeService.validarDados(profissionalSaude, br);
-
-            if(br.hasErrors()) {
-                ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", br);
-                ra.addFlashAttribute("message", "Erro ao salvar profissional da saúde");
-                ra.addFlashAttribute("profissionalSaude",profissionalSaude);
-                ra.addFlashAttribute("active_tab","profissional");
-                return "redirect:/login";
-            }
-
+            profissionalSaudeService.validarDados(profissionalSaude, br);
             profissionalSaudeService.salvarProfissional(profissionalSaude);
+
+            ra.addFlashAttribute("active_tab",null);
         }catch(NegocioException ne){
             return "";
+        }catch(ValidacaoException validacaoException){
+            ra.addFlashAttribute("org.springframework.validation.BindingResult.profissionalSaude", validacaoException.getBindingResult());
+            ra.addFlashAttribute("message", "Erro ao salvar profissional da saúde");
+            ra.addFlashAttribute("profissionalSaude",profissionalSaude);
+            ra.addFlashAttribute("active_tab","profissional");
         }
-        ra.addFlashAttribute("active_tab",null);
+
         return "redirect:/login";
     }
 }

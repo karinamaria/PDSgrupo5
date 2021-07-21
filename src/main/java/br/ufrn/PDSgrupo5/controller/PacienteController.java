@@ -1,6 +1,7 @@
 package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.model.Atendimento;
 import br.ufrn.PDSgrupo5.model.Paciente;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -8,22 +9,15 @@ import br.ufrn.PDSgrupo5.service.AtendimentoService;
 import br.ufrn.PDSgrupo5.service.HorarioAtendimentoService;
 import br.ufrn.PDSgrupo5.service.PacienteService;
 import br.ufrn.PDSgrupo5.service.ProfissionalSaudeService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("paciente")
@@ -58,16 +52,16 @@ public class PacienteController {
     @PostMapping("/salvar")
     public String salvar(@Valid Paciente paciente, BindingResult br, Model model){
 
-        paciente = pacienteService.verificarEdicao(paciente);
+        try{
+            paciente = pacienteService.verificarEdicao(paciente);
+            pacienteService.validarPaciente(paciente, br);
 
-        br = pacienteService.validarPaciente(paciente, br);
-
-        if(br.hasErrors()){
+            pacienteService.salvarPaciente(paciente);
+        }catch(ValidacaoException validacaoException){
             model.addAttribute("message", "Erro ao salvar paciente");
             model.addAttribute(paciente);
             return form(model);
         }
-        pacienteService.salvarPaciente(paciente);
 
         return "redirect:/dashboard";
     }
