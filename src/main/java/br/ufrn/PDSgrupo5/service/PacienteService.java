@@ -1,7 +1,7 @@
 package br.ufrn.PDSgrupo5.service;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.AcessoNegadoException;
 import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
@@ -120,9 +120,9 @@ public class PacienteService {
     /**
      * Verifica se o usuário está editando o próprio cadastro
      * @param paciente Paciente que será editado
-     * @throws NegocioException exceção lançada caso a edição não for permitida
+     * @throws AcessoNegadoException exceção lançada caso a edição não for permitida
      */
-    public void verificarPermissao(Paciente paciente) throws NegocioException{
+    public void verificarPermissao(Paciente paciente) throws AcessoNegadoException {
         if(paciente.getId() == null){ //eh usuário novo
             return;
         }
@@ -136,7 +136,7 @@ public class PacienteService {
 
         if( paciente.getId() != pacienteLogado.getId() || paciente.getPessoa().getId() != paciente.getPessoa().getId()
             || paciente.getPessoa().getUsuario().getId() != paciente.getPessoa().getUsuario().getId()){
-            throw new NegocioException("Você não tem permissão para editar esse usuário");
+            throw new AcessoNegadoException("Você não tem permissão para editar esse usuário");
         }
     }
 }

@@ -2,6 +2,11 @@ package br.ufrn.PDSgrupo5.exception;
 
 import org.springframework.validation.BindingResult;
 
+/**
+ * Classe para tratamento de exceção do tipo de validação de dados
+ * @author Karina Maria e Maria Eduarda
+ * @version 1.0.0
+ */
 public class ValidacaoException extends Exception{
     private static final long serialVersionUID = 1L;
 
@@ -11,11 +16,11 @@ public class ValidacaoException extends Exception{
         this.bindingResult = br;
     }
 
-    public BindingResult getBindingResult() {
-        return bindingResult;
+    public ValidacaoException(String message){
+        super(message);
     }
 
-    public void setBindingResult(BindingResult bindingResult) {
-        this.bindingResult = bindingResult;
+    public BindingResult getBindingResult() {
+        return bindingResult;
     }
 }

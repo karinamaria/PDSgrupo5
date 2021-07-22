@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoRegistro;
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.AcessoNegadoException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Pessoa;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -197,7 +197,7 @@ public class ProfissionalSaudeService {
 		return salvar(ps);
 	}
 
-	public void verificarPermissao(ProfissionalSaude ps) throws NegocioException{
+	public void verificarPermissao(ProfissionalSaude ps) throws AcessoNegadoException {
 		if(ps.getId() == null){ //eh usuário novo
 			return;
 		}
@@ -211,7 +211,7 @@ public class ProfissionalSaudeService {
 
 		if( ps.getId() != psLogado.getId() || ps.getPessoa().getId() != psLogado.getPessoa().getId()
 				|| ps.getPessoa().getUsuario().getId() != psLogado.getPessoa().getUsuario().getId()){
-			throw new NegocioException("Você não tem permissão para editar esse usuário");
+			throw new AcessoNegadoException("Você não tem permissão para editar esse usuário");
 		}
 	}
 }

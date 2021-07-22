@@ -1,15 +1,14 @@
 package br.ufrn.PDSgrupo5.service;
 
-import java.util.Date;
-import java.util.List;
-
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.ValidacaoException;
+import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
+import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
 import br.ufrn.PDSgrupo5.repository.HorarioAtendimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
-import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class HorarioAtendimentoService {
@@ -33,19 +32,19 @@ public class HorarioAtendimentoService {
 		return horarioAtendimentoRepository.save(ha);
 	}
 	
-	public void validarHorario(HorarioAtendimento ha) throws NegocioException{
+	public void validarHorario(HorarioAtendimento ha) throws ValidacaoException{
 		if(ha.getHorarioInicio().compareTo(ha.getHorarioFim()) >= 0) {
-			throw new NegocioException("Horário inválido. A hora de início deve ser anterior a de fim e elas não podem ser iguais.");
+			throw new ValidacaoException("Horário inválido. A hora de início deve ser anterior a de fim e elas não podem ser iguais.");
 		}
 
 		if(ha.getHorarioInicio().before(new Date())){
-			throw new NegocioException("A data início do atendimento deve ser posterior a data atual");
+			throw new ValidacaoException("A data início do atendimento deve ser posterior a data atual");
 		}
 
 		List<HorarioAtendimento> horarios = profissionalSaudeService.buscarHorariosAtendimento();
 		for(HorarioAtendimento horario : horarios ) {
 			if( horariosTemChoque(ha, horario) ) {
-				throw new NegocioException("Choque entre horários. Verifique seus horários já cadastrados.");
+				throw new ValidacaoException("Choque entre horários. Verifique seus horários já cadastrados.");
 			}
 		}
 	}

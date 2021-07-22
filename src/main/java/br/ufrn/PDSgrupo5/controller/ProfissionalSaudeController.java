@@ -1,6 +1,5 @@
 package br.ufrn.PDSgrupo5.controller;
 
-import br.ufrn.PDSgrupo5.exception.NegocioException;
 import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.model.HorarioAtendimento;
 import br.ufrn.PDSgrupo5.model.ProfissionalSaude;
@@ -116,8 +115,8 @@ public class ProfissionalSaudeController {
 			
 		} catch (ParseException e) {
 			return "redirect:/profissional-saude/error";
-		} catch (NegocioException ne){
-            model.addAttribute("mensagemErro", ne.getMessage());
+		} catch (ValidacaoException validacaoException){
+            model.addAttribute("mensagemErro", validacaoException.getMessage());
             return horariosAtendimento(model);
         }
     	

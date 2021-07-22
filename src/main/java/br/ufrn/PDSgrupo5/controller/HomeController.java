@@ -1,7 +1,7 @@
 package br.ufrn.PDSgrupo5.controller;
 
 import br.ufrn.PDSgrupo5.enumeration.EnumTipoPapel;
-import br.ufrn.PDSgrupo5.exception.NegocioException;
+import br.ufrn.PDSgrupo5.exception.AcessoNegadoException;
 import br.ufrn.PDSgrupo5.exception.ValidacaoException;
 import br.ufrn.PDSgrupo5.handler.UsuarioHelper;
 import br.ufrn.PDSgrupo5.model.Paciente;
@@ -83,7 +83,7 @@ public class HomeController {
             pacienteService.validarPaciente(paciente, br);
             pacienteService.salvarPaciente(paciente);
             ra.addFlashAttribute("active_tab",null); //ir para página de login
-        }catch(NegocioException ne){
+        }catch(AcessoNegadoException ne){
             return "";//o usuário não tem permissão para editar outro candidato. Apresente página de erro
         }catch(ValidacaoException validacaoException){
             ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", validacaoException.getBindingResult());
@@ -102,7 +102,7 @@ public class HomeController {
             profissionalSaudeService.validarDados(profissionalSaude, br);
             profissionalSaudeService.salvarProfissional(profissionalSaude);
             ra.addFlashAttribute("active_tab",null);
-        }catch(NegocioException ne){
+        }catch(AcessoNegadoException ne){
             return "";//usuário não tem permissão para edição
         }catch(ValidacaoException validacaoException){
             ra.addFlashAttribute("org.springframework.validation.BindingResult.profissionalSaude", validacaoException.getBindingResult());
