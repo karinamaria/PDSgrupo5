@@ -84,7 +84,7 @@ public class HomeController {
             pacienteService.salvarPaciente(paciente);
             ra.addFlashAttribute("active_tab",null); //ir para página de login
         }catch(AcessoNegadoException ne){
-            return "";//o usuário não tem permissão para editar outro candidato. Apresente página de erro
+            return "error/401.html";//o usuário não tem permissão para editar outro candidato. Apresente página de erro
         }catch(ValidacaoException validacaoException){
             ra.addFlashAttribute("org.springframework.validation.BindingResult.paciente", validacaoException.getBindingResult());
             ra.addFlashAttribute("message", "Erro ao salvar paciente");
@@ -103,7 +103,7 @@ public class HomeController {
             profissionalSaudeService.salvarProfissional(profissionalSaude);
             ra.addFlashAttribute("active_tab",null);
         }catch(AcessoNegadoException ne){
-            return "";//usuário não tem permissão para edição
+            return "error/401.html";//usuário não tem permissão para edição
         }catch(ValidacaoException validacaoException){
             ra.addFlashAttribute("org.springframework.validation.BindingResult.profissionalSaude", validacaoException.getBindingResult());
             ra.addFlashAttribute("message", "Erro ao salvar profissional da saúde");
