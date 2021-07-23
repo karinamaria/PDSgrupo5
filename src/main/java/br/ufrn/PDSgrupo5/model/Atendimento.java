@@ -20,7 +20,7 @@ public class Atendimento extends EntidadeAbstrata {
 	private String descricao;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean status = false;
+	private Boolean confirmado = false;
 
 	@OneToOne
 	private Paciente paciente;
@@ -31,6 +31,9 @@ public class Atendimento extends EntidadeAbstrata {
 	@Column(name="tipo_atendimento")
 	@Enumerated(EnumType.STRING)
 	private EnumTipoAtendimento enumTipoAtendimento;
+	
+	@Column(name="requer_lembrete_retorno")
+	private Boolean requerLembreteRetorno = true;
 
 	public Atendimento() {
 	}
@@ -67,12 +70,12 @@ public class Atendimento extends EntidadeAbstrata {
 		this.descricao = descricao;
 	}
 
-	public Boolean getStatus() {
-		return status;
+	public Boolean getConfirmado() {
+		return confirmado;
 	}
 
-	public void setStatus(Boolean status) {
-		this.status = status;
+	public void setConfirmado(Boolean status) {
+		this.confirmado = status;
 	}
 
 	public Paciente getPaciente() {
@@ -97,5 +100,13 @@ public class Atendimento extends EntidadeAbstrata {
 
 	public void setEnumTipoAtendimento(EnumTipoAtendimento enumTipoAtendimento) {
 		this.enumTipoAtendimento = enumTipoAtendimento;
+	}
+	
+	public Boolean getRequerLembreteRetorno() {
+		return requerLembreteRetorno;
+	}
+	
+	public void setRequerLembreteRetorno(Boolean requerLembreteRetorno) {
+		this.requerLembreteRetorno = requerLembreteRetorno;
 	}
 }

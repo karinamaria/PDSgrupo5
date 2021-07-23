@@ -60,7 +60,7 @@ public class AtendimentoService {
         Atendimento atendimento = atendimentoRepository.getById(id);
 
         if(autorizacao){//atendimento autorizado
-            atendimento.setStatus(true);
+            atendimento.setConfirmado(true);
             atendimentoRepository.save(atendimento);
         }else{
             HorarioAtendimento horarioAtendimento = atendimento.getHorarioAtendimento();
@@ -68,5 +68,9 @@ public class AtendimentoService {
             horarioAtendimentoService.salvarHorario(horarioAtendimento);//salvar horário de atendimento
             atendimentoRepository.delete(atendimento);
         }
+    }
+    
+    public List<Atendimento> buscarAtendimentosRequeremLembreteRetorno(){
+    	return atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
     }
 }
