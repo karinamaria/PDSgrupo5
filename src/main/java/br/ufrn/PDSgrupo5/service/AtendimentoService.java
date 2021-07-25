@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AtendimentoService {
@@ -71,6 +72,27 @@ public class AtendimentoService {
     }
     
     public List<Atendimento> buscarAtendimentosRequeremLembreteRetorno(){
-    	return atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
+        List<Atendimento> atendimentos = atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
+
+        //retornar apenas os atendimentos de pacientes que ainda não marcaram o retorno
+        return   atendimentos.stream()
+                .filter(a -> pacienteNaoMarcouRetorno(a))
+                .collect(Collectors.toList());
+    	//return atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
+    }
+
+    /**
+     * Verifica se o paciente não marcou retorno ao profissional da saúde
+     * @param a atendimento que foi realizado há 60 dias ou mais.
+     * @return true: se o paciente não marcou retorno; false: caso contrário.
+     */
+    public Boolean pacienteNaoMarcouRetorno(Atendimento a){
+        List<Atendimento> todosProximosAtendimentos = atendimentoRepository.buscarTodosProximosAtendimentosPaciente(a.getPaciente().getId());
+
+        return todosProximosAtendimentos == null? true : todosProximosAtendimentos.stream()
+                .filter(atendimento -> atendimento.getProfissionalSaude().equals(a.getProfissionalSaude()))
+                .count() == 0;
+
+        //return !todosProximosAtendimentos.contains(a.getProfissionalSaude());
     }
 }

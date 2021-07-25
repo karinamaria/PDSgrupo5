@@ -24,4 +24,7 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
     
     @Query(value="select a from Atendimento a where a.requerLembreteRetorno=true and a.horarioAtendimento.horarioInicio <= (CURRENT_DATE - 60)")
     List<Atendimento> buscarAtendimentosRequeremLembreteRetorno();
+
+    @Query(value="select a from Atendimento a where a.confirmado=true and a.paciente.id=?1 and a.horarioAtendimento.horarioInicio > CURRENT_DATE")
+    List<Atendimento> buscarTodosProximosAtendimentosPaciente(Long idPaciente);
 }
