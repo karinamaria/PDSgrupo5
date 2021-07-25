@@ -52,6 +52,7 @@ public class EmailService {
 	}
 	
 	@Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
+	//@Scheduled(cron = "* * * * * *", zone = TIME_ZONE) //a cada um minuto para teste
 	public void enviarLembretesRetorno() {
 		List<Atendimento> atendimentos = atendimentoService.buscarAtendimentosRequeremLembreteRetorno();
 		for(Atendimento a : atendimentos) {

@@ -74,25 +74,25 @@ public class AtendimentoService {
     public List<Atendimento> buscarAtendimentosRequeremLembreteRetorno(){
         List<Atendimento> atendimentos = atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
 
-        //retornar apenas os atendimentos de pacientes que ainda não marcaram o retorno
         return   atendimentos.stream()
-                .filter(a -> pacienteNaoMarcouRetorno(a))
+                .filter(a -> lembrarRetorno(a))
                 .collect(Collectors.toList());
     	//return atendimentoRepository.buscarAtendimentosRequeremLembreteRetorno();
     }
 
     /**
-     * Verifica se o paciente não marcou retorno ao profissional da saúde
+     * Verifica se é necessário lembrar o paciente para realizar um retorno
      * @param a atendimento que foi realizado há 60 dias ou mais.
-     * @return true: se o paciente não marcou retorno; false: caso contrário.
+     * @return false: não precisa enviar e-mail retorno; true: caso contrário
      */
-    public Boolean pacienteNaoMarcouRetorno(Atendimento a){
+    public Boolean lembrarRetorno(Atendimento a){
+        //buscar todos os próximos atendimentos e os que foram realizados nos últimos 60 dias
         List<Atendimento> todosProximosAtendimentos = atendimentoRepository.buscarTodosProximosAtendimentosPaciente(a.getPaciente().getId());
 
-        return todosProximosAtendimentos == null? true : todosProximosAtendimentos.stream()
+        return todosProximosAtendimentos == null || todosProximosAtendimentos.isEmpty()? true : todosProximosAtendimentos.stream()
                 .filter(atendimento -> atendimento.getProfissionalSaude().equals(a.getProfissionalSaude()))
-                .count() == 0;
+                .count() != 0;
 
-        //return !todosProximosAtendimentos.contains(a.getProfissionalSaude());
+        //return todosProximosAtendimentos.contains(a.getProfissionalSaude());
     }
 }
