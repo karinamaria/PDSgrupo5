@@ -31,6 +31,7 @@
                                 <th>Hora de início</th>
                                 <th>Hora de fim</th>
                                 <th>Status</th>
+                                <th>Preço</th>
                                 <th>Opção</th>
                             </tr>
                         </thead>
@@ -41,6 +42,7 @@
                             <td th:text="${horario.horaInicioToString()}"></td>
                             <td th:text="${horario.horaFimToString()}"></td>
                             <td th:text="${horario.statusToString()}"></td>
+                            <td th:text="${horario.precoToString()}"></td>
                             
                             <td class="actions-col">
                                 <a th:if="!${horario.livre}" th:data-id="${horario.id}" data-toggle="modal" data-tt="Visualizar paciente" data-target="#" id="btnViewInfoPaciente" class="btn btn-action">
@@ -73,16 +75,23 @@
 					         class="form-control" id="dataHorarioInput" type="date"
 					         name="data" required="required" />
 						</div>
-					 <div class="form-group col-md-4">
-					     <label for="horaInicioInput">Horário de início</label> <input
-					         class="form-control" id="horaInicioInput" type="time"
-					         name="horaInicio" required="required" />
-					 </div>
-					 <div class="form-group col-md-3">
-					     <label for="horaFimInput">Horário de fim</label> <input
-					         class="form-control" id="horaFimInput" type="time"
-					         name="horaFim" required="required" />
-					 </div>       
+					    <div class="form-group col-md-3">
+							<label for="precoHorarioInput">Preço</label> <input
+					         class="form-control" id="precoHorarioInput" type="number" step="0.01"
+					         name="preco" required="required" />
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+						     <label for="horaInicioInput">Horário de início</label> <input
+						         class="form-control" id="horaInicioInput" type="time"
+						         name="horaInicio" required="required" />
+						 </div>
+						 <div class="form-group col-md-4">
+						     <label for="horaFimInput">Horário de fim</label> <input
+						         class="form-control" id="horaFimInput" type="time"
+						         name="horaFim" required="required" />
+						 </div> 
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

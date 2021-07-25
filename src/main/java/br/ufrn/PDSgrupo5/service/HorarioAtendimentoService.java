@@ -33,6 +33,10 @@ public class HorarioAtendimentoService {
 	}
 	
 	public void validarHorario(HorarioAtendimento ha) throws ValidacaoException{
+		if(ha.getPreco() <= 0) {
+			throw new ValidacaoException("Preço inválido. Por favor, insira um valor maior que 0.");
+		}
+		
 		if(ha.getHorarioInicio().compareTo(ha.getHorarioFim()) >= 0) {
 			throw new ValidacaoException("Horário inválido. A hora de início deve ser anterior a de fim e elas não podem ser iguais.");
 		}
@@ -49,10 +53,11 @@ public class HorarioAtendimentoService {
 		}
 	}
 	
-	public HorarioAtendimento converterParaHorarioAtendimento(Date horarioInicio, Date horarioFim) {	
+	public HorarioAtendimento converterParaHorarioAtendimento(Date horarioInicio, Date horarioFim, Double preco) {	
 		HorarioAtendimento ha = new HorarioAtendimento();
     	ha.setHorarioInicio(horarioInicio);
     	ha.setHorarioFim(horarioFim);
+    	ha.setPreco(preco);
     	ha.setDiaSemana(dataHoraService.getDiaSemana(horarioInicio));
     	
 		return ha;

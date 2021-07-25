@@ -101,13 +101,14 @@ public class ProfissionalSaudeController {
     }
     
     @PostMapping("/addHorarioAtendimento")
-    public String addHorarioAtendimento(@RequestParam("data") String data, @RequestParam("horaInicio") String horaInicio,
+    public String addHorarioAtendimento(@RequestParam("data") String data, @RequestParam("preco") Double preco,
+    								  @RequestParam("horaInicio") String horaInicio,
     								  @RequestParam("horaFim") String horaFim, Model model) {
     	
 		try {
 			Date horarioInicio = dataHoraService.converterParaDate(data, horaInicio);
 			Date horarioFim = dataHoraService.converterParaDate(data, horaFim);
-			HorarioAtendimento ha = horarioAtendimentoService.converterParaHorarioAtendimento(horarioInicio, horarioFim);
+			HorarioAtendimento ha = horarioAtendimentoService.converterParaHorarioAtendimento(horarioInicio, horarioFim, preco);
 			
 			horarioAtendimentoService.validarHorario(ha);
 

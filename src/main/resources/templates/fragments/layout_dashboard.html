@@ -108,6 +108,7 @@
           </h6>
           <span class="card-text">
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+            <p th:text="'Preço: '+${atendimento.horarioAtendimento.precoToString()}"></p>
             <p th:if="!${atendimento.confirmado}">Aguardando confirmação do profissional</p>
           </span>
         </div>
@@ -172,6 +173,7 @@
           </h6>
           <span class="card-text">
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+            <p th:text="'Preço: '+${atendimento.horarioAtendimento.precoToString()}"></p>
             <a th:data-id="${atendimento.id}" data-toggle="modal" data-target="#modalStatusAtendimento" class="btn btn-primary">Alterar estado do atendimento</a>
           </span>
         </div>
@@ -192,6 +194,7 @@
           </h6>
           <span class="card-text">
             <p th:text="'Horário: '+${#dates.format(atendimento.horarioAtendimento.horarioInicio, 'dd/MM/yyyy HH:mm')} + '-' +${#dates.format(atendimento.horarioAtendimento.horarioFim, 'HH:mm')}"></p>
+          	<p th:text="'Preço: '+${atendimento.horarioAtendimento.precoToString()}"></p>
           </span>
         </div>
       </div>

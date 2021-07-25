@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,6 +26,8 @@ public class HorarioAtendimento extends EntidadeAbstrata{
 	private Date horarioFim;
 	
 	private boolean livre = true;
+	
+	private Double preco;
 
 	public HorarioAtendimento() {
 	}
@@ -61,6 +64,14 @@ public class HorarioAtendimento extends EntidadeAbstrata{
 		this.livre = livre;
 	}
 	
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+	
 	public String statusToString() {
 		if(livre) {
 			return "Livre";
@@ -78,5 +89,10 @@ public class HorarioAtendimento extends EntidadeAbstrata{
 	
 	public String horaFimToString() {
 		return new SimpleDateFormat("HH:mm").format(horarioFim);
+	}
+	
+	public String precoToString() {
+		String precoString = "R$ " + new DecimalFormat("#,##0.00").format(preco); 
+		return precoString;
 	}
 }

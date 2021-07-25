@@ -13,8 +13,6 @@ public class Atendimento extends EntidadeAbstrata {
 	@OneToOne(cascade = CascadeType.ALL)
 	private HorarioAtendimento horarioAtendimento;
 
-	private Double preco;
-
 	private String titulo;
 
 	private String descricao;
@@ -44,14 +42,6 @@ public class Atendimento extends EntidadeAbstrata {
 
 	public void setHorarioatendimento(HorarioAtendimento horarioAtendimento) {
 		this.horarioAtendimento = horarioAtendimento;
-	}
-	
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
 	}
 
 	public String getTitulo() {
