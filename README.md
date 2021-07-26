@@ -19,15 +19,15 @@ O sistema foi idealizado de modo que seja algo parecido com o iFood e Uber Eats,
 # Como executar este projeto
 
 Para executar localmente é necessário ter instalado na sua máquina: Java, PostgreSQL. Em seguida, clone o projeto através de:
-```aidl
+```
 git@github.com:karinamaria/PDSgrupo5.git
 ```
 Abra o projeto em uma IDE de sua preferência. Logo, depois execute o projeto através do maven:
-```aidl
+```
 mvn spring-boot:run
 ```
 Ou execute a classe:
-```aidl
+```
 PdSgrupo5Application.java
 ```
 Abra seu navegador de preferência e coloque em: `localhost:8080`
